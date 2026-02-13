@@ -7,6 +7,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔫</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
+
 :root {
   --p: #ff6b35; --pd: #cc5529; --s: #ffd700; --a: #00d4ff;
   --g: #00ff88; --r: #ff3366; --violet: #b44dff;
@@ -99,31 +100,20 @@ body {
 #admin-panel {
   display: none; position: fixed; top: 20px; right: 20px; z-index: 9999;
   background: linear-gradient(145deg, var(--cd), var(--cd2));
-  border: 2px solid var(--r); border-radius: 16px;
-  padding: 20px; width: 450px; max-height: 85vh; overflow-y: auto;
-  box-shadow: 0 10px 40px rgba(0,0,0,.5), 0 0 30px rgba(255,51,102,.2);
-}
-#admin-panel.owner {
-  border-color: var(--owner);
+  border: 2px solid var(--owner); border-radius: 16px;
+  padding: 20px; width: 500px; max-height: 90vh; overflow-y: auto;
   box-shadow: 0 10px 40px rgba(0,0,0,.5), 0 0 30px var(--owner-glow);
 }
 #admin-panel h3 {
-  font-family: 'Orbitron', monospace; color: var(--r);
+  font-family: 'Orbitron', monospace; color: var(--owner);
   margin-bottom: 15px; display: flex; align-items: center; gap: 8px;
-}
-#admin-panel.owner h3 {
-  color: var(--owner);
   text-shadow: 0 0 20px var(--owner-glow);
 }
 .admin-btn {
   position: fixed; top: 20px; right: 20px; z-index: 9998;
-  padding: 12px 20px; background: linear-gradient(135deg, var(--r), #d62839);
+  padding: 12px 20px; background: linear-gradient(135deg, var(--owner), #990000);
   border: none; border-radius: 10px; color: white;
   font-family: 'Rajdhani', sans-serif; font-weight: 700; cursor: pointer;
-  box-shadow: 0 4px 15px rgba(255,51,102,.3);
-}
-.admin-btn.owner {
-  background: linear-gradient(135deg, var(--owner), #990000);
   box-shadow: 0 4px 15px var(--owner-glow);
   animation: pulse 2s infinite;
 }
@@ -133,8 +123,6 @@ body {
   padding: 12px; background: rgba(0,0,0,.2); border-radius: 10px;
   border: 1px solid var(--bd);
 }
-.user-item.approved { border-color: var(--g); background: rgba(0,255,136,.05); }
-.user-item.pending { border-color: #ffc107; background: rgba(255,193,7,.05); }
 .user-item.owner { border-color: var(--owner); background: rgba(255,0,0,.1); }
 .user-item span { font-size: .85rem; }
 .action-btns { display: flex; gap: 6px; }
@@ -153,16 +141,42 @@ body {
 .stat-box .num { font-size: 1.5rem; font-weight: 900; color: var(--s); }
 .stat-box .lbl { font-size: .7rem; color: var(--dm); text-transform: uppercase; }
 
-/* === DATA MANAGER === */
-.data-manager {
+/* === CATEGORY MANAGER === */
+.category-manager {
   margin-top: 20px;
-  border-top: 2px solid var(--bd);
+  border-top: 2px solid var(--owner);
   padding-top: 20px;
 }
-.data-manager h4 {
-  font-family: 'Orbitron', monospace; color: var(--a);
+.category-manager h4 {
+  font-family: 'Orbitron', monospace; color: var(--owner);
   margin-bottom: 15px; font-size: 0.9rem;
-  display: flex; align-items: center; gap: 8px;
+}
+.category-list {
+  display: flex; flex-direction: column;
+  gap: 10px; margin-bottom: 15px;
+  max-height: 200px; overflow-y: auto;
+}
+.category-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px; background: rgba(0,0,0,.2);
+  border: 1px solid var(--bd); border-radius: 10px;
+}
+.category-item.active {
+  border-color: var(--g);
+  background: rgba(0,255,136,.05);
+}
+.category-info {
+  display: flex; align-items: center; gap: 10px;
+}
+.category-icon {
+  font-size: 1.5rem;
+}
+.category-name {
+  font-weight: 700; color: var(--tx);
+}
+.category-id {
+  font-size: 0.7rem; color: var(--dm);
+  font-family: 'JetBrains Mono', monospace;
 }
 .category-tabs {
   display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 15px;
@@ -172,11 +186,11 @@ body {
   border-radius: 8px; color: var(--dm); font-size: 0.75rem; font-weight: 700;
   cursor: pointer; transition: all .3s; font-family: 'Rajdhani', sans-serif;
 }
-.cat-tab:hover { border-color: var(--a); color: var(--tx); }
+.cat-tab:hover { border-color: var(--owner); color: var(--tx); }
 .cat-tab.active {
-  background: linear-gradient(135deg, rgba(0,212,255,.15), rgba(0,212,255,.05));
-  border-color: var(--a); color: var(--a);
-  box-shadow: 0 0 15px rgba(0,212,255,.2);
+  background: linear-gradient(135deg, rgba(255,0,0,.15), rgba(255,0,0,.05));
+  border-color: var(--owner); color: var(--owner);
+  box-shadow: 0 0 15px var(--owner-glow);
 }
 .data-list {
   max-height: 300px; overflow-y: auto;
@@ -188,7 +202,7 @@ body {
   padding: 12px; background: rgba(0,0,0,.2); border-radius: 10px;
   border: 1px solid var(--bd); transition: all .3s;
 }
-.data-item:hover { border-color: var(--p); background: rgba(255,107,53,.05); }
+.data-item:hover { border-color: var(--owner); background: rgba(255,0,0,.05); }
 .data-item-info { flex: 1; }
 .data-item-name {
   font-weight: 700; color: var(--tx); font-size: 0.9rem;
@@ -217,6 +231,10 @@ body {
   display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 .add-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,255,136,.3); }
+.add-btn.secondary {
+  background: linear-gradient(135deg, var(--a), #0088cc);
+  color: white;
+}
 
 /* === MODAL === */
 .modal-overlay {
@@ -227,10 +245,10 @@ body {
 .modal-overlay.active { display: flex; }
 .modal {
   background: linear-gradient(145deg, var(--cd), var(--cd2));
-  border: 2px solid var(--a); border-radius: 20px;
+  border: 2px solid var(--owner); border-radius: 20px;
   padding: 30px; width: 100%; max-width: 500px;
   max-height: 90vh; overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,.5), 0 0 40px rgba(0,212,255,.2);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5), 0 0 40px var(--owner-glow);
   animation: modalIn 0.3s ease;
 }
 @keyframes modalIn {
@@ -238,8 +256,9 @@ body {
   to { opacity: 1; transform: none; }
 }
 .modal h3 {
-  font-family: 'Orbitron', monospace; color: var(--a);
+  font-family: 'Orbitron', monospace; color: var(--owner);
   margin-bottom: 20px; text-align: center;
+  text-shadow: 0 0 20px var(--owner-glow);
 }
 .form-group {
   margin-bottom: 15px;
@@ -260,7 +279,7 @@ body {
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-  border-color: var(--a); box-shadow: 0 0 20px rgba(0,212,255,.2);
+  border-color: var(--owner); box-shadow: 0 0 20px var(--owner-glow);
 }
 .form-group textarea {
   min-height: 80px; resize: vertical;
@@ -321,7 +340,7 @@ body {
   filter: none; pointer-events: all; opacity: 1;
 }
 
-/* === RESTUL STILURILOR ORIGINALE === */
+/* === RESTUL STILURILOR === */
 #particles { position:fixed; inset:0; z-index:0; pointer-events:none }
 body::before {
   content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
@@ -654,6 +673,149 @@ td b { color:var(--s) }
   #admin-panel { width: calc(100% - 40px); right: 20px; left: 20px; }
   .form-row { grid-template-columns: 1fr; }
 }
+
+
+/* === ENHANCED LOGIN === */
+.login-lock-icon {
+  font-size: 3.5rem; margin-bottom: 10px;
+  filter: drop-shadow(0 0 20px rgba(88,101,242,.4));
+  animation: lockPulse 3s ease-in-out infinite;
+}
+@keyframes lockPulse {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(88,101,242,.4)); transform: scale(1); }
+  50% { filter: drop-shadow(0 0 35px rgba(88,101,242,.6)); transform: scale(1.05); }
+}
+.owner-login-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 30px;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border: 2px solid rgba(255,0,0,.4);
+  border-radius: 12px; color: white;
+  font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700;
+  cursor: pointer; transition: all .3s;
+  box-shadow: 0 6px 25px rgba(255,0,0,.25);
+  width: 80%; margin: 0 auto;
+  justify-content: center;
+  animation: ownerPulse 2.5s ease-in-out infinite;
+}
+@keyframes ownerPulse {
+  0%, 100% { box-shadow: 0 6px 25px rgba(255,0,0,.25); }
+  50% { box-shadow: 0 6px 35px rgba(255,0,0,.4), 0 0 15px rgba(255,0,0,.2); }
+}
+.owner-login-btn:hover {
+  transform: translateY(-3px); box-shadow: 0 10px 40px rgba(255,0,0,.4);
+}
+.login-separator {
+  display: flex; align-items: center; gap: 15px;
+  margin: 18px 0; color: var(--dm); font-size: .75rem;
+  text-transform: uppercase; letter-spacing: 2px;
+}
+.login-separator::before, .login-separator::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--bd), transparent);
+}
+.login-footer-text {
+  margin-top: 25px; padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,.04);
+  color: var(--dm); font-size: .8rem; line-height: 1.7;
+}
+.pending-box.denied { background: rgba(255,51,102,.08); border-color: rgba(255,51,102,.25); }
+.pending-box.denied::before { background: linear-gradient(90deg, var(--r), #cc0033, var(--r)); }
+.pending-box.denied h3 { color: var(--r); }
+.pending-box.blacklisted { background: rgba(100,0,0,.15); border-color: rgba(255,0,0,.4); }
+.pending-box.blacklisted::before { background: linear-gradient(90deg, #ff0000, #880000, #ff0000); }
+.pending-box.blacklisted h3 { color: #ff0000; }
+.member-badge {
+  display: inline-block; background: linear-gradient(135deg, #5865F2, #4752C4);
+  color: white; padding: 4px 12px; border-radius: 20px;
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+}
+.admin-badge-tag {
+  display: inline-block; background: linear-gradient(135deg, var(--s), #cc9900);
+  color: #000; padding: 4px 12px; border-radius: 20px;
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+}
+
+/* === ADMIN TABS === */
+.admin-tabs {
+  display: flex; gap: 4px; margin-bottom: 15px;
+  background: rgba(0,0,0,.2); border-radius: 10px; padding: 4px;
+}
+.admin-tab {
+  flex: 1; padding: 10px 8px; text-align: center;
+  background: transparent; border: none; border-radius: 8px;
+  color: var(--dm); font-family: 'Rajdhani', sans-serif;
+  font-weight: 700; font-size: .78rem; cursor: pointer; transition: all .3s;
+}
+.admin-tab:hover { color: var(--tx); background: rgba(255,255,255,.03); }
+.admin-tab.active {
+  background: linear-gradient(135deg, rgba(255,0,0,.15), rgba(255,0,0,.05));
+  color: var(--owner); box-shadow: 0 0 15px var(--owner-glow);
+}
+.admin-section { display: none; }
+.admin-section.active { display: block; }
+
+/* === MEMBER LIST === */
+.member-list { display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto; }
+.member-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px; background: rgba(0,0,0,.2); border-radius: 12px;
+  border: 1px solid var(--bd); transition: all .3s;
+}
+.member-item:hover { border-color: rgba(255,255,255,.1); background: rgba(0,0,0,.3); }
+.member-item.pending-item { border-color: rgba(255,193,7,.3); background: rgba(255,193,7,.03); }
+.member-item.blacklisted-item { border-color: rgba(255,0,0,.5); background: rgba(255,0,0,.08); opacity: .7; }
+.member-item.restricted-item { border-color: rgba(255,51,102,.3); }
+.member-item.admin-item { border-color: rgba(255,215,0,.3); }
+.member-item.expired-item { opacity: .7; }
+.member-avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--bd); }
+.member-info { flex: 1; min-width: 0; }
+.member-name { font-weight: 700; font-size: .85rem; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.member-meta { font-size: .65rem; color: var(--dm); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+.member-status {
+  display: inline-block; padding: 2px 8px; border-radius: 6px;
+  font-size: .55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+}
+.member-status.active { background: rgba(0,255,136,.15); color: var(--g); }
+.member-status.pending { background: rgba(255,193,7,.15); color: #ffc107; }
+.member-status.expired { background: rgba(107,107,138,.15); color: var(--dm); }
+.member-status.blacklisted { background: rgba(255,0,0,.2); color: #ff0000; }
+.member-status.restricted { background: rgba(255,51,102,.15); color: var(--r); }
+.member-status.admin-status { background: rgba(255,215,0,.15); color: var(--s); }
+.member-actions { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+.m-action-btn {
+  padding: 4px 8px; border: none; border-radius: 5px;
+  font-size: .6rem; font-weight: 700; cursor: pointer; transition: all .2s;
+  font-family: 'Rajdhani', sans-serif;
+}
+.m-action-btn:hover { transform: translateY(-1px); }
+.m-action-btn.approve { background: rgba(0,255,136,.15); color: var(--g); border: 1px solid rgba(0,255,136,.3); }
+.m-action-btn.restrict { background: rgba(255,51,102,.1); color: var(--r); border: 1px solid rgba(255,51,102,.3); }
+.m-action-btn.blacklist { background: rgba(255,0,0,.15); color: #ff0000; border: 1px solid rgba(255,0,0,.3); }
+.m-action-btn.delete { background: rgba(107,107,138,.1); color: var(--dm); border: 1px solid rgba(107,107,138,.3); }
+.m-action-btn.make-admin { background: rgba(255,215,0,.1); color: var(--s); border: 1px solid rgba(255,215,0,.3); }
+.m-action-btn.reactivate { background: rgba(0,212,255,.1); color: var(--a); border: 1px solid rgba(0,212,255,.3); }
+.member-expiry { font-size: .6rem; color: var(--dm); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+.member-expiry.expired { color: var(--r); }
+.member-expiry.expiring-soon { color: #ffc107; }
+.admin-search {
+  width: 100%; padding: 10px 14px; background: var(--inp);
+  border: 2px solid var(--bd); border-radius: 10px;
+  color: var(--tx); font-family: 'Rajdhani', sans-serif;
+  font-size: .85rem; outline: none; transition: all .3s; margin-bottom: 8px;
+}
+.admin-search:focus { border-color: var(--owner); box-shadow: 0 0 15px var(--owner-glow); }
+.admin-filter-row { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+.admin-filter-btn {
+  padding: 5px 10px; background: var(--inp); border: 1px solid var(--bd);
+  border-radius: 6px; color: var(--dm); font-size: .65rem; font-weight: 700;
+  cursor: pointer; transition: all .2s; font-family: 'Rajdhani', sans-serif;
+}
+.admin-filter-btn:hover { border-color: var(--owner); color: var(--tx); }
+.admin-filter-btn.active { background: rgba(255,0,0,.1); border-color: var(--owner); color: var(--owner); }
+@keyframes slideIn { from{transform:translateX(100px);opacity:0} to{transform:none;opacity:1} }
+@keyframes slideOut { from{transform:none;opacity:1} to{transform:translateX(100px);opacity:0} }
+
 </style>
 </head>
 <body>
@@ -663,24 +825,26 @@ td b { color:var(--s) }
 <!-- LOGIN SCREEN -->
 <div id="login-screen">
   <div class="login-box" id="login-box">
-    <div class="login-logo">🔐 ACCES RESTRICTIONAT</div>
-    <div class="login-sub">Autentificare necesara pentru Craft Roleplay Calculator</div>
-    
     <div id="login-content">
-      <a href="#" class="discord-btn" onclick="loginWithDiscord()">
+      <div class="login-lock-icon">🔐</div>
+      <div class="login-logo">ACCES<br>RESTRICTIONAT</div>
+      <div class="login-sub">Autentificare necesara pentru Craft Roleplay Calculator</div>
+      
+      <button class="discord-btn" onclick="loginWithDiscord()" style="width:100%;justify-content:center;">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
         Conectare cu Discord
-      </a>
-      
-      <!-- BUTON PENTRU OWNER (DOAR PENTRU TEST) -->
-      <button onclick="simulateOwnerLogin()" style="margin-top: 15px; padding: 12px 24px; background: linear-gradient(135deg, #ff0000, #990000); border: none; border-radius: 10px; color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700; cursor: pointer; box-shadow: 0 0 20px rgba(255,0,0,.3);">
-        👑 Login ca OWNER (Test)
       </button>
       
-      <p style="margin-top: 20px; color: var(--dm); font-size: 0.85rem;">
+      <div class="login-separator">sau</div>
+      
+      <button class="owner-login-btn" onclick="loginOwner()">
+        👑 Login OWNER
+      </button>
+
+      <div class="login-footer-text">
         🔒 Doar membrii aprobati pot accesa calculatorul.<br>
         Solicitarea ta va fi revizuita de un administrator.
-      </p>
+      </div>
     </div>
 
     <div id="pending-content" style="display: none;">
@@ -691,12 +855,11 @@ td b { color:var(--s) }
           <div class="user-id" id="pending-id">ID: 000000000</div>
         </div>
       </div>
-      <div class="pending-box">
-        <h3>⏳ Asteapta Aprobare</h3>
-        <p>Contul tau este in curs de verificare.<br>
-        Vei primi acces imediat ce un administrator iti aproba solicitarea.</p>
+      <div class="pending-box" id="pending-box">
+        <h3 id="pending-title">&#x23F3; ASTEPTARE APROBARE</h3>
+        <p id="pending-message">Cererea ta de acces a fost trimisa.</p>
       </div>
-      <button class="discord-btn" style="margin-top: 15px; background: var(--dm);" onclick="logout()">
+      <button class="discord-btn" style="margin-top: 15px; background: linear-gradient(135deg, var(--dm), #555); width:100%; justify-content:center;" onclick="logout()">
         Deconectare
       </button>
     </div>
@@ -705,90 +868,80 @@ td b { color:var(--s) }
 
 <!-- ADMIN PANEL -->
 <button class="admin-btn" id="admin-toggle" onclick="toggleAdmin()" style="display: none;">
-  🛡️ Admin Panel
+  &#x1F451; OWNER Panel
 </button>
 <div id="admin-panel">
-  <h3>🛡️ Panou Administrare</h3>
-  
-  <!-- User Management -->
+  <h3>&#x1F451; Panou OWNER</h3>
   <div class="stats">
-    <div class="stat-box">
-      <div class="num" id="stat-total">0</div>
-      <div class="lbl">Total Utilizatori</div>
-    </div>
-    <div class="stat-box">
-      <div class="num" id="stat-approved">0</div>
-      <div class="lbl">Aprobati</div>
-    </div>
-    <div class="stat-box">
-      <div class="num" id="stat-pending">0</div>
-      <div class="lbl">In Asteptare</div>
-    </div>
-    <div class="stat-box">
-      <div class="num" id="stat-online">1</div>
-      <div class="lbl">Online Acum</div>
-    </div>
+    <div class="stat-box"><div class="num" id="stat-total" style="color:var(--owner)">0</div><div class="lbl">Total</div></div>
+    <div class="stat-box"><div class="num" id="stat-active" style="color:var(--g)">0</div><div class="lbl">Activi</div></div>
+    <div class="stat-box"><div class="num" id="stat-pending" style="color:#ffc107">0</div><div class="lbl">Asteptare</div></div>
+    <div class="stat-box"><div class="num" id="stat-blacklisted" style="color:var(--r)">0</div><div class="lbl">Blacklist</div></div>
   </div>
-  
-  <div style="margin-bottom: 10px; font-size: 0.8rem; color: var(--dm);">
-    👑 <span id="admin-role" style="color: var(--s); font-weight: 700;">Admin</span>: 
-    <span id="admin-name" style="color: var(--s);"></span>
+  <div style="margin-bottom:12px;font-size:.8rem;color:var(--dm);">&#x1F451; OWNER: <span id="admin-name" style="color:var(--owner);font-weight:700;"></span></div>
+
+  <div class="admin-tabs">
+    <button class="admin-tab active" onclick="switchAdminTab('members')">&#x1F465; Membri</button>
+    <button class="admin-tab" onclick="switchAdminTab('categories')">&#x1F4C1; Categorii</button>
+    <button class="admin-tab" onclick="switchAdminTab('data')">&#x1F4E6; Date</button>
+    <button class="admin-tab" onclick="switchAdminTab('tools')">&#x1F527; Unelte</button>
   </div>
 
-  <div style="display: flex; gap: 8px; margin-bottom: 15px;">
-    <input type="text" id="search-users" placeholder="Cauta utilizator..." 
-           style="flex: 1; padding: 8px 12px; background: var(--inp); border: 1px solid var(--bd); 
-                  border-radius: 8px; color: var(--tx); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;">
+  <div class="admin-section active" id="admin-members">
+    <input type="text" class="admin-search" placeholder="&#x1F50D; Cauta membru dupa nume sau ID..." oninput="filterMembers(this.value)">
+    <div class="admin-filter-row">
+      <button class="admin-filter-btn active" onclick="setMemberFilter('all',this)">Toti</button>
+      <button class="admin-filter-btn" onclick="setMemberFilter('active',this)">Activi</button>
+      <button class="admin-filter-btn" onclick="setMemberFilter('pending',this)">Asteptare</button>
+      <button class="admin-filter-btn" onclick="setMemberFilter('expired',this)">Expirat</button>
+      <button class="admin-filter-btn" onclick="setMemberFilter('restricted',this)">Restrict</button>
+      <button class="admin-filter-btn" onclick="setMemberFilter('blacklisted',this)">Blacklist</button>
+    </div>
+    <div class="member-list" id="member-list"></div>
   </div>
 
-  <div class="user-list" id="user-list"></div>
+  <div class="admin-section" id="admin-categories">
+    <button class="add-btn secondary" onclick="openCategoryModal()">&#x2795; Adauga Categorie Noua</button>
+    <div class="category-list" id="category-list"></div>
+  </div>
 
-  <!-- DATA MANAGER -->
-  <div class="data-manager">
-    <h4>📦 Manager Date Aplicatie</h4>
-    
-    <div class="category-tabs" id="data-categories">
-      <div class="cat-tab active" onclick="switchDataCategory('arme')">🔫 Arme</div>
-      <div class="cat-tab" onclick="switchDataCategory('munitie')">🎯 Munitie</div>
-      <div class="cat-tab" onclick="switchDataCategory('componente')">⚙️ Componente</div>
-      <div class="cat-tab" onclick="switchDataCategory('masa')">🔨 Masa Craft</div>
-      <div class="cat-tab" onclick="switchDataCategory('locatii')">📍 Locatii</div>
-    </div>
-
-    <button class="add-btn" onclick="openAddModal()">
-      ➕ Adauga Intrare Noua
-    </button>
-
+  <div class="admin-section" id="admin-data">
+    <div class="category-tabs" id="data-categories"></div>
+    <button class="add-btn" onclick="openAddModal()">&#x2795; Adauga Intrare Noua</button>
     <div class="data-list" id="data-list"></div>
   </div>
-  
-  <button onclick="exportData()" style="width: 100%; margin-top: 10px; padding: 10px; 
-          background: linear-gradient(135deg, var(--a), #0088cc); border: none; border-radius: 8px; 
-          color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700; cursor: pointer;">
-    💾 Exporta Datele (Backup)
-  </button>
-  
-  <button onclick="resetToDefault()" style="width: 100%; margin-top: 10px; padding: 10px; 
-          background: rgba(255,0,0,.2); border: 1px solid rgba(255,0,0,.3); border-radius: 8px; 
-          color: var(--r); font-family: 'Rajdhani', sans-serif; font-weight: 700; cursor: pointer;">
-    🔄 Reset la Valori Default
-  </button>
-  
-  <button onclick="toggleAdmin()" style="width: 100%; margin-top: 10px; padding: 10px; 
-          background: var(--bd); border: none; border-radius: 8px; color: var(--tx); 
-          font-family: 'Rajdhani', sans-serif; font-weight: 700; cursor: pointer;">
-    Inchide Panoul
-  </button>
+
+  <div class="admin-section" id="admin-tools">
+    <button onclick="exportData()" style="width:100%;margin-top:8px;padding:10px;background:linear-gradient(135deg,var(--a),#0088cc);border:none;border-radius:8px;color:white;font-family:'Rajdhani',sans-serif;font-weight:700;cursor:pointer;">&#x1F4BE; Exporta Date (Backup)</button>
+    <button onclick="importData()" style="width:100%;margin-top:8px;padding:10px;background:linear-gradient(135deg,var(--g),#00cc6a);border:none;border-radius:8px;color:#000;font-family:'Rajdhani',sans-serif;font-weight:700;cursor:pointer;">&#x1F4E5; Importa Date (Restore)</button>
+    <input type="file" id="import-file" style="display:none;" accept=".json" onchange="handleImport(event)">
+    <button onclick="exportMembers()" style="width:100%;margin-top:8px;padding:10px;background:linear-gradient(135deg,var(--s),#cc9900);border:none;border-radius:8px;color:#000;font-family:'Rajdhani',sans-serif;font-weight:700;cursor:pointer;">&#x1F465; Exporta Membri</button>
+    <button onclick="clearExpiredMembers()" style="width:100%;margin-top:8px;padding:10px;background:linear-gradient(135deg,var(--r),#cc0033);border:none;border-radius:8px;color:white;font-family:'Rajdhani',sans-serif;font-weight:700;cursor:pointer;">&#x1F5D1; Sterge Membri Expirat</button>
+  </div>
+
+  <button onclick="toggleAdmin()" style="width:100%;margin-top:12px;padding:10px;background:var(--bd);border:none;border-radius:8px;color:var(--tx);font-family:'Rajdhani',sans-serif;font-weight:700;cursor:pointer;">&#x2715; Inchide Panoul</button>
 </div>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal" id="modal">
-    <h3 id="modal-title">Adauga Intrare Noua</h3>
+    <h3 id="modal-title">Adauga</h3>
     <div id="modal-content"></div>
     <div class="modal-actions">
       <button class="save" onclick="saveData()">Salveaza</button>
       <button class="cancel" onclick="closeModal()">Anuleaza</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESTRICT MODAL -->
+<div class="modal-overlay" id="restrict-modal">
+  <div class="modal">
+    <h3>&#x26D4; Restrictionare Membru</h3>
+    <div id="restrict-content"></div>
+    <div class="modal-actions">
+      <button class="save" onclick="confirmRestrict()" style="background:linear-gradient(135deg,var(--r),#cc0033);color:white;">Aplica Restrictie</button>
+      <button class="cancel" onclick="closeRestrictModal()">Anuleaza</button>
     </div>
   </div>
 </div>
@@ -805,137 +958,35 @@ td b { color:var(--s) }
 
   <div class="br" style="justify-content: space-between;">
     <div style="display: flex; align-items: center; gap: 10px;">
-      <img id="user-avatar" src="" style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--g);">
+      <img id="user-avatar" src="" style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--owner); box-shadow: 0 0 10px var(--owner-glow);">
       <div>
         <div style="font-size: 0.75rem; color: var(--dm);">Bine ai venit,</div>
-        <div id="user-display-name" style="font-weight: 700; color: var(--s); font-family: 'Orbitron', monospace;"></div>
+        <div id="user-display-name" style="font-weight: 700; color: var(--owner); font-family: 'Orbitron', monospace; text-shadow: 0 0 10px var(--owner-glow);"></div>
         <div id="user-role-badge" style="font-size: 0.65rem; margin-top: 2px;"></div>
       </div>
     </div>
-    <button onclick="logout()" style="padding: 8px 16px; background: rgba(255,51,102,.1); border: 1px solid rgba(255,51,102,.3); 
-            border-radius: 8px; color: var(--r); font-family: 'Rajdhani', sans-serif; font-weight: 700; 
-            cursor: pointer; font-size: 0.85rem; transition: all .3s;" onmouseover="this.style.background='rgba(255,51,102,.2)'" 
-            onmouseout="this.style.background='rgba(255,51,102,.1)'">
-      Deconectare
-    </button>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div id="user-expiry-info" style="font-size:.7rem;color:var(--dm);font-family:'JetBrains Mono',monospace;"></div>
+      <button onclick="logout()" style="padding: 8px 16px; background: rgba(255,0,0,.1); border: 1px solid rgba(255,0,0,.3); border-radius: 8px; color: var(--owner); font-family: 'Rajdhani', sans-serif; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: all .3s;" onmouseover="this.style.background='rgba(255,0,0,.2)'" onmouseout="this.style.background='rgba(255,0,0,.1)'">Deconectare</button>
+    </div>
   </div>
 
   <div class="br">
-    <span class="tag">🎮 COD 5% ROBERTO</span>
-    <span class="sep">•</span>
+    <span class="tag">&#x1F3AE; COD 5% ROBERTO</span>
+    <span class="sep">&#x2022;</span>
     <a href="http://v.b-zone.ro" target="_blank">v.b-zone.ro</a>
-    <span class="sep">•</span>
+    <span class="sep">&#x2022;</span>
     <span class="ref">REF 6218</span>
-    <span class="sep">•</span>
-    <span class="srv">🌐 Server B-ZONE</span>
+    <span class="sep">&#x2022;</span>
+    <span class="srv">&#x1F310; Server B-ZONE</span>
   </div>
 
-  <div class="cat-groups">
-    <div class="cat-group-btn mafie on" onclick="showGroup('mafie')">
-      <span class="cg-icon">🔫</span>CRAFT MAFIE
-      <div class="cg-sub">Cocaina • Gloante • Arme • Componente</div>
-    </div>
-    <div class="cat-group-btn legal" onclick="showGroup('legal')">
-      <span class="cg-icon">🔨</span>CRAFT LEGAL
-      <div class="cg-sub">Masa Craft • Locatii</div>
-    </div>
-  </div>
-
-  <div class="cat-panel on" id="g_mafie">
-    <div class="sub-tabs mafie" id="mafie_tabs"></div>
-
-    <div class="pn on" id="p_cocaina">
-      <div class="sc gn">
-        <div class="st green">💎 Calculator Procesare Cocaina</div>
-        <div class="ir">
-          <div class="ig">
-            <label>🌿 Numar frunze de coca</label>
-            <input type="number" id="cI" placeholder="560" min="0" value="560" oninput="cC()">
-          </div>
-        </div>
-        <div class="ib">✨ Introdu numarul de frunze pentru a calcula intregul proces de la materie prima la produs final</div>
-      </div>
-      <div class="gr g3" id="cCards"></div>
-      <div class="sm">
-        <div class="sm-t">📊 Sumar Final</div>
-        <div class="sg">
-          <div class="si"><div class="lb">Total KG Procesate</div><div class="sv" id="cK">0.00</div></div>
-          <div class="si"><div class="lb">Total Plicuri</div><div class="sv gl" id="cP">0</div></div>
-          <div class="si"><div class="lb">Profit Estimat</div><div class="sv gn" id="cF">$0</div></div>
-        </div>
-        <div class="rc">📋 Flux: <b>🌿 Frunze → 🧪 Sticle → 🍳 Tavi → 🧱 Brichete → 👜 Pungi → 📦 Plicuri</b></div>
-      </div>
-    </div>
-
-    <div class="pn" id="p_gloante">
-      <div class="sc hl">
-        <div class="st">🎯 Selecteaza Calibrul</div>
-        <div class="bs" id="bBtns"></div>
-      </div>
-      <div class="sc">
-        <div class="ir">
-          <div class="ig">
-            <label>🔢 Cate gloante vrei?</label>
-            <input type="number" id="bI" placeholder="100" min="0" value="100" oninput="cB()">
-          </div>
-          <div class="mc bl"><div class="nm">Carcase Necesare</div><div class="vl" id="bC">0</div></div>
-          <div class="mc gn"><div class="nm">Gloante Produse</div><div class="vl" id="bP">0</div></div>
-        </div>
-      </div>
-      <div class="st cyan">📦 Materiale Necesare</div>
-      <div class="gr g3">
-        <div class="mc cu"><div class="ic">🥉</div><div class="nm">Cupru</div><div class="vl" id="bCu">0</div><div class="un">bucati</div></div>
-        <div class="mc lead"><div class="ic">⚙️</div><div class="nm">Plumb</div><div class="vl" id="bPb">0</div><div class="un">bucati</div></div>
-        <div class="mc gp"><div class="ic">💥</div><div class="nm">Praf de Pusca</div><div class="vl" id="bPr">0</div><div class="un">bucati</div></div>
-      </div>
-      <div class="sm">
-        <div class="sm-t">📊 Sumar Productie</div>
-        <div class="sg">
-          <div class="si"><div class="lb">Tip Selectat</div><div class="sv gl" id="bT">9mm</div></div>
-          <div class="si"><div class="lb">Gloante Cerute</div><div class="sv" id="bQ">0</div></div>
-          <div class="si"><div class="lb">Gloante Produse</div><div class="sv gn" id="bTP">0</div></div>
-          <div class="si"><div class="lb">Total Materiale</div><div class="sv" id="bTM">0</div></div>
-        </div>
-        <div class="rc">📋 Reteta: <b id="bR"></b></div>
-      </div>
-    </div>
-
-    <div class="pn" id="p_arme">
-      <div class="sc hl">
-        <div class="st">🔫 Calculator Craft Arme</div>
-        <div class="ir">
-          <div class="ig"><label>Selecteaza Arma</label><select id="aS" onchange="cA()"></select></div>
-          <div class="ig"><label>Cantitate</label><input type="number" id="aQ" value="1" min="1" max="100" oninput="cA()"></div>
-        </div>
-      </div>
-      <div id="aR"></div>
-    </div>
-
-    <div class="pn" id="p_comp">
-      <div class="sc hl"><div class="st">⚙️ Componente & Materiale Arme</div></div>
-      <div id="cT"></div>
-    </div>
-
-  </div>
-
-  <div class="cat-panel" id="g_legal">
-    <div class="sub-tabs legal" id="legal_tabs"></div>
-
-    <div class="pn" id="p_masa">
-      <div class="sc hl"><div class="st gold">🔨 Retete Masa de Craft</div></div>
-      <div id="mT"></div>
-    </div>
-
-    <div class="pn" id="p_loc">
-      <div class="sc hl"><div class="st cyan">📍 Locatii Materiale</div></div>
-      <div id="lT"></div>
-    </div>
-
-  </div>
+  <div class="cat-groups" id="main-categories"></div>
+  <div id="dynamic-panels"></div>
 
   <footer class="ft">
     <p>Calculator pentru server <b>B-ZONE V</b> — GTA 5 RolePlay</p>
-    <p style="margin-top:8px">🎮 <b>COD 5% ROBERTO</b> | <a href="http://v.b-zone.ro">v.b-zone.ro</a> | <b>REF 6218</b></p>
+    <p style="margin-top:8px">&#x1F3AE; <b>COD 5% ROBERTO</b> | <a href="http://v.b-zone.ro">v.b-zone.ro</a> | <b>REF 6218</b></p>
     <p class="copy">CRAFT ROLEPLAY 2026 — TOATE DREPTURILE REZERVATE</p>
   </footer>
 
@@ -944,25 +995,22 @@ td b { color:var(--s) }
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   ███  CONFIGURATIE OWNER  ███
+   ███  CONFIGURATIE OWNER & DISCORD  ███
    ═══════════════════════════════════════════════════════════════ */
 
-// 🔴 ID-UL TĂU DISCORD - OWNER/ADMIN AUTOMAT
 const OWNER_ID = '1077872559422439444';
-
-// Configurare Discord OAuth2
 const DISCORD_CONFIG = {
-  CLIENT_ID: '1461666992023928998', // ← Înlocuiește cu Client ID-ul tău
-  REDIRECT_URI: window.location.origin + window.location.pathname,
+  CLIENT_ID: '1461666992023928998',
+  REDIRECT_URI: 'https://robertodeveloper91.github.io/craft-b-zone-roleplay',
   SCOPE: 'identify'
 };
+const ACCESS_DURATION_DAYS = 31;
+const ACCESS_DURATION_MS = ACCESS_DURATION_DAYS * 24 * 60 * 60 * 1000;
 
-// Lista de admini (ID-uri Discord) - poți adăuga mai mulți
-const ADMIN_IDS = [OWNER_ID];
-
-/* ═══════════════════════════════════════════════════════════════
-   ███  SISTEM DE DATE EDITABIL  ███
-   ═══════════════════════════════════════════════════════════════ */
+const DEFAULT_CATEGORIES = [
+  { id: 'mafie', name: 'CRAFT MAFIE', icon: '🔫', sub: 'Cocaina • Gloante • Arme • Componente', color: 'mafie' },
+  { id: 'legal', name: 'CRAFT LEGAL', icon: '🔨', sub: 'Masa Craft • Locatii', color: 'legal' }
+];
 
 const DEFAULT_DATA = {
   MUNITIE: {
@@ -1002,19 +1050,34 @@ const DEFAULT_DATA = {
   }
 };
 
+/* ═══════════════════════════════════════════════════════════════
+   ███  INCARCARE DATE  ███
+   ═══════════════════════════════════════════════════════════════ */
+
+function loadCategories() {
+  const saved = localStorage.getItem('craft_categories');
+  return saved ? JSON.parse(saved) : [...DEFAULT_CATEGORIES];
+}
+
 function loadData() {
   const saved = localStorage.getItem('craft_app_data');
   if (saved) return JSON.parse(saved);
   return JSON.parse(JSON.stringify(DEFAULT_DATA));
 }
 
+function saveCategories() {
+  localStorage.setItem('craft_categories', JSON.stringify(categories));
+}
+
 function saveAppData() {
   localStorage.setItem('craft_app_data', JSON.stringify(APP_DATA));
 }
 
+let categories = loadCategories();
 let APP_DATA = loadData();
 let currentDataCategory = 'arme';
 let editingItem = null;
+let modalMode = 'data'; // 'data' sau 'category'
 
 let MUNITIE = APP_DATA.MUNITIE;
 let ARME = APP_DATA.ARME;
@@ -1023,128 +1086,215 @@ let MATARME = APP_DATA.MATARME;
 let MASA = APP_DATA.MASA;
 let LOC = APP_DATA.LOC;
 
+
+function loadMembers() {
+  const saved = localStorage.getItem('craft_members');
+  return saved ? JSON.parse(saved) : {};
+}
+function saveMembers() {
+  localStorage.setItem('craft_members', JSON.stringify(members));
+}
+
+let members = loadMembers();
+let currentMemberFilter = 'all';
+let memberSearchQuery = '';
+let restrictingMemberId = null;
+
 /* ═══════════════════════════════════════════════════════════════
-   ███  SISTEM AUTHENTIFICARE  ███
+   ███  SISTEM AUTHENTIFICARE - OWNER + MEMBRI  ███
    ═══════════════════════════════════════════════════════════════ */
 
-let users = JSON.parse(localStorage.getItem('craft_users') || '[]');
 let currentUser = JSON.parse(localStorage.getItem('craft_current_user') || 'null');
+let accessLog = JSON.parse(localStorage.getItem('craft_access_log') || '[]');
 
-// 🔴 LOGIN CA OWNER (PENTRU TEST)
-function simulateOwnerLogin() {
-  const ownerUser = {
-    id: OWNER_ID,
-    username: 'OWNER',
-    avatar: 'https://cdn.discordapp.com/embed/avatars/0.png',
-    discriminator: '0000',
-    approved: true,
-    isAdmin: true,
-    isOwner: true,
-    joinedAt: new Date().toISOString()
-  };
-  
-  saveUser(ownerUser);
-  currentUser = ownerUser;
-  localStorage.setItem('craft_current_user', JSON.stringify(currentUser));
-  
-  checkAccess();
-  showNotification('👑 Te-ai logat ca OWNER!');
-}
-
-// 🔴 LOGIN REAL CU DISCORD
 function loginWithDiscord() {
-  // Pentru producție, decomentează:
-  // const url = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CONFIG.CLIENT_ID}&redirect_uri=${encodeURIComponent(DISCORD_CONFIG.REDIRECT_URI)}&response_type=token&scope=${DISCORD_CONFIG.SCOPE}`;
-  // window.location.href = url;
-  
-  // Pentru test, folosește simulateOwnerLogin sau simulare normală
-  alert('Pentru test, folosește butonul "Login ca OWNER"\n\nPentru Discord real, configurează CLIENT_ID în cod.');
+  const params = new URLSearchParams({
+    client_id: DISCORD_CONFIG.CLIENT_ID,
+    redirect_uri: DISCORD_CONFIG.REDIRECT_URI,
+    response_type: 'token',
+    scope: DISCORD_CONFIG.SCOPE
+  });
+  window.location.href = `https://discord.com/api/oauth2/authorize?${params.toString()}`;
 }
 
-// Procesează callback OAuth2
+function loginOwner() {
+  localStorage.setItem('craft_login_type', 'owner');
+  loginWithDiscord();
+}
+
 function handleDiscordCallback() {
   const fragment = new URLSearchParams(window.location.hash.slice(1));
   const accessToken = fragment.get('access_token');
+  if (fragment.get('error')) { alert('Eroare Discord: ' + fragment.get('error')); return; }
+  if (!accessToken) return;
   
-  if (accessToken) {
-    fetch('https://discord.com/api/users/@me', {
-      headers: { 'Authorization': `Bearer ${accessToken}` }
-    })
-    .then(res => res.json())
-    .then(user => {
-      const isOwner = user.id === OWNER_ID;
-      const userData = {
-        id: user.id,
-        username: user.username,
-        avatar: user.avatar 
-          ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
-          : `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`,
-        discriminator: user.discriminator,
-        approved: isOwner || false, // Owner e aprobat automat
-        isAdmin: isOwner || false,  // Owner e admin automat
-        isOwner: isOwner,
-        joinedAt: new Date().toISOString()
-      };
-      
-      saveUser(userData);
-      currentUser = userData;
+  const loginType = localStorage.getItem('craft_login_type') || 'member';
+  localStorage.removeItem('craft_login_type');
+  
+  fetch('https://discord.com/api/users/@me', {
+    headers: { 'Authorization': `Bearer ${accessToken}` }
+  })
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  .then(user => {
+    const avatar = user.avatar
+      ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+      : `https://cdn.discordapp.com/embed/avatars/${(parseInt(user.discriminator)||0) % 5}.png`;
+    
+    window.history.replaceState({}, document.title, window.location.pathname);
+    
+    // OWNER
+    if (user.id === OWNER_ID) {
+      currentUser = { id:user.id, username:user.username, avatar, approved:true, isOwner:true, isAdmin:true, loginTime:new Date().toISOString() };
+      accessLog.push({ time:new Date().toISOString(), user:user.username, id:user.id, type:'owner' });
+      localStorage.setItem('craft_access_log', JSON.stringify(accessLog));
       localStorage.setItem('craft_current_user', JSON.stringify(currentUser));
-      
-      window.history.replaceState({}, document.title, window.location.pathname);
-      checkAccess();
-      
-      if (isOwner) {
-        showNotification('👑 Bine ai venit, OWNER!');
+      showMainApp();
+      showNotification('\u{1F451} Bine ai venit, OWNER!');
+      return;
+    }
+    
+    // Tried owner login but not owner
+    if (loginType === 'owner') {
+      currentUser = { id:user.id, username:user.username, avatar, approved:false, isOwner:false };
+      localStorage.setItem('craft_current_user', JSON.stringify(currentUser));
+      showOwnerDenied();
+      return;
+    }
+    
+    // Check blacklist
+    const md = members[user.id];
+    if (md && md.blacklisted) {
+      currentUser = { id:user.id, username:user.username, avatar, approved:false, isOwner:false, blacklisted:true };
+      localStorage.setItem('craft_current_user', JSON.stringify(currentUser));
+      showBlacklisted();
+      return;
+    }
+    
+    // Check restricted
+    if (md && md.restricted) {
+      if (!md.restrictedPermanent && new Date(md.restrictedUntil) <= new Date()) {
+        md.restricted = false; md.restrictedUntil = null; md.restrictedPermanent = false; saveMembers();
+      } else {
+        currentUser = { id:user.id, username:user.username, avatar, approved:false, isOwner:false, restricted:true, restrictedUntil:md.restrictedUntil, restrictedPermanent:md.restrictedPermanent };
+        localStorage.setItem('craft_current_user', JSON.stringify(currentUser));
+        showRestricted();
+        return;
       }
-    })
-    .catch(err => {
-      console.error('Eroare la autentificare:', err);
-      alert('Eroare la conectarea cu Discord. Încearcă din nou.');
-    });
+    }
+    
+    // Check approved + not expired
+    if (md && md.approved && new Date(md.expiresAt) > new Date()) {
+      currentUser = { id:user.id, username:user.username, avatar, approved:true, isOwner:false, isAdmin:md.isAdmin||false, expiresAt:md.expiresAt, loginTime:new Date().toISOString() };
+      md.lastLogin = new Date().toISOString();
+      md.loginCount = (md.loginCount||0)+1;
+      md.username = user.username; md.avatar = avatar;
+      saveMembers();
+      accessLog.push({ time:new Date().toISOString(), user:user.username, id:user.id, type:'member' });
+      localStorage.setItem('craft_access_log', JSON.stringify(accessLog));
+      localStorage.setItem('craft_current_user', JSON.stringify(currentUser));
+      showMainApp();
+      showNotification('\u2705 Bine ai venit, ' + user.username + '!');
+      return;
+    }
+    
+    // Expired access
+    if (md && md.approved && new Date(md.expiresAt) <= new Date()) {
+      md.approved = false; md.status = 'expired'; saveMembers();
+    }
+    
+    // New or pending member
+    if (!members[user.id]) {
+      members[user.id] = { id:user.id, username:user.username, avatar, joinedAt:new Date().toISOString(), approved:false, isAdmin:false, blacklisted:false, restricted:false, status:'pending', loginCount:1, lastLogin:new Date().toISOString() };
+    } else {
+      members[user.id].username = user.username;
+      members[user.id].avatar = avatar;
+      members[user.id].lastLogin = new Date().toISOString();
+      members[user.id].loginCount = (members[user.id].loginCount||0)+1;
+      if (!members[user.id].blacklisted && !members[user.id].restricted) members[user.id].status = 'pending';
+    }
+    saveMembers();
+    
+    currentUser = { id:user.id, username:user.username, avatar, approved:false, isOwner:false };
+    localStorage.setItem('craft_current_user', JSON.stringify(currentUser));
+    showPendingApproval();
+  })
+  .catch(err => { console.error(err); alert('Eroare Discord: ' + err.message); });
+}
+
+function showOwnerDenied() {
+  $('login-screen').style.display = 'flex';
+  $('login-content').style.display = 'none';
+  $('pending-content').style.display = 'block';
+  $('main-app').classList.remove('unlocked');
+  $('pending-avatar').src = currentUser.avatar;
+  $('pending-name').textContent = currentUser.username;
+  $('pending-id').textContent = 'ID: ' + currentUser.id;
+  $('pending-box').className = 'pending-box denied';
+  $('pending-title').textContent = '\u26D4 ACCES INTERZIS';
+  $('pending-message').innerHTML = 'Nu esti OWNER-ul acestui calculator.<br>Butonul <b>Login OWNER</b> este doar pentru proprietar.<br><br>Foloseste <b>Conectare cu Discord</b> pentru a solicita acces.';
+}
+
+function showBlacklisted() {
+  $('login-screen').style.display = 'flex';
+  $('login-content').style.display = 'none';
+  $('pending-content').style.display = 'block';
+  $('main-app').classList.remove('unlocked');
+  $('pending-avatar').src = currentUser.avatar;
+  $('pending-name').textContent = currentUser.username;
+  $('pending-id').textContent = 'ID: ' + currentUser.id;
+  $('pending-box').className = 'pending-box blacklisted';
+  $('pending-title').textContent = '\u{1F6AB} BLACKLISTED';
+  $('pending-message').innerHTML = 'Contul tau a fost adaugat in <b style="color:#ff0000">BLACKLIST</b>.<br>Nu mai ai permisiunea de a folosi acest calculator.';
+}
+
+function showRestricted() {
+  $('login-screen').style.display = 'flex';
+  $('login-content').style.display = 'none';
+  $('pending-content').style.display = 'block';
+  $('main-app').classList.remove('unlocked');
+  $('pending-avatar').src = currentUser.avatar;
+  $('pending-name').textContent = currentUser.username;
+  $('pending-id').textContent = 'ID: ' + currentUser.id;
+  $('pending-box').className = 'pending-box denied';
+  $('pending-title').textContent = '\u26D4 ACCES RESTRICTIONAT';
+  if (currentUser.restrictedPermanent) {
+    $('pending-message').innerHTML = 'Accesul tau a fost <b style="color:var(--r)">restrictionat permanent</b>.';
+  } else {
+    const until = new Date(currentUser.restrictedUntil).toLocaleDateString('ro-RO',{day:'2-digit',month:'long',year:'numeric'});
+    $('pending-message').innerHTML = 'Accesul tau a fost <b style="color:var(--r)">restrictionat</b>.<br>Restrictia expira pe: <b style="color:var(--s)">' + until + '</b>';
   }
 }
 
-function saveUser(userData) {
-  const existingIndex = users.findIndex(u => u.id === userData.id);
-  if (existingIndex >= 0) {
-    // Păstrează drepturile existente sau acordă drepturi de owner
-    const existing = users[existingIndex];
-    userData.approved = existing.approved || userData.isOwner;
-    userData.isAdmin = existing.isAdmin || userData.isOwner;
-    userData.isOwner = existing.isOwner || userData.id === OWNER_ID;
-    users[existingIndex] = userData;
-  } else {
-    // Verifică dacă e owner la prima logare
-    if (userData.id === OWNER_ID) {
-      userData.approved = true;
-      userData.isAdmin = true;
-      userData.isOwner = true;
-    }
-    users.push(userData);
-  }
-  localStorage.setItem('craft_users', JSON.stringify(users));
+function showPendingApproval() {
+  $('login-screen').style.display = 'flex';
+  $('login-content').style.display = 'none';
+  $('pending-content').style.display = 'block';
+  $('main-app').classList.remove('unlocked');
+  $('pending-avatar').src = currentUser.avatar;
+  $('pending-name').textContent = currentUser.username;
+  $('pending-id').textContent = 'ID: ' + currentUser.id;
+  $('pending-box').className = 'pending-box';
+  $('pending-title').textContent = '\u23F3 ASTEPTARE APROBARE';
+  $('pending-message').innerHTML = 'Cererea ta a fost trimisa!<br>Asteapta aprobarea unui administrator.<br>Vei primi acces pentru <b style="color:var(--s)">' + ACCESS_DURATION_DAYS + ' zile</b>.';
 }
 
 function checkAccess() {
-  if (!currentUser) {
-    showLoginScreen();
-    return;
+  if (!currentUser) { showLoginScreen(); return; }
+  if (currentUser.id === OWNER_ID && currentUser.isOwner) { showMainApp(); return; }
+  const md = members[currentUser.id];
+  if (!md) { showPendingApproval(); return; }
+  if (md.blacklisted) { currentUser.blacklisted=true; localStorage.setItem('craft_current_user',JSON.stringify(currentUser)); showBlacklisted(); return; }
+  if (md.restricted) {
+    if (!md.restrictedPermanent && new Date(md.restrictedUntil) <= new Date()) { md.restricted=false; saveMembers(); }
+    else { currentUser.restricted=true; currentUser.restrictedUntil=md.restrictedUntil; currentUser.restrictedPermanent=md.restrictedPermanent; localStorage.setItem('craft_current_user',JSON.stringify(currentUser)); showRestricted(); return; }
   }
-  
-  // Verifică dacă e owner
-  if (currentUser.id === OWNER_ID) {
-    currentUser.isOwner = true;
-    currentUser.isAdmin = true;
-    currentUser.approved = true;
+  if (md.approved && new Date(md.expiresAt) > new Date()) {
+    currentUser.approved=true; currentUser.isAdmin=md.isAdmin||false; currentUser.expiresAt=md.expiresAt;
+    localStorage.setItem('craft_current_user',JSON.stringify(currentUser));
+    showMainApp(); return;
   }
-  
-  if (currentUser.approved) {
-    showMainApp();
-  } else {
-    showPendingScreen();
-  }
-  
-  updateAdminPanel();
+  if (md.approved) { md.approved=false; md.status='expired'; saveMembers(); }
+  showPendingApproval();
 }
 
 function showLoginScreen() {
@@ -1156,177 +1306,390 @@ function showLoginScreen() {
   $('admin-panel').style.display = 'none';
 }
 
-function showPendingScreen() {
-  $('login-screen').style.display = 'flex';
-  $('login-content').style.display = 'none';
-  $('pending-content').style.display = 'block';
-  $('main-app').classList.remove('unlocked');
-  
-  $('pending-avatar').src = currentUser.avatar;
-  $('pending-name').textContent = currentUser.username;
-  $('pending-id').textContent = 'ID: ' + currentUser.id;
-  
-  // Adaugă badge de owner dacă e cazul
-  if (currentUser.id === OWNER_ID) {
-    $('pending-name').classList.add('owner');
-    $('pending-avatar').classList.add('owner');
-  }
-}
-
 function showMainApp() {
   $('login-screen').style.display = 'none';
   $('main-app').classList.add('unlocked');
-  
   $('user-avatar').src = currentUser.avatar;
   $('user-display-name').textContent = currentUser.username;
   
-  // Badge rol
-  const roleBadge = $('user-role-badge');
   if (currentUser.isOwner) {
-    roleBadge.innerHTML = '<span class="owner-badge">👑 OWNER</span>';
-    $('user-avatar').classList.add('owner');
+    $('user-role-badge').innerHTML = '<span class="owner-badge">\u{1F451} OWNER</span>';
+    $('user-display-name').style.color = 'var(--owner)';
     $('user-avatar').style.borderColor = 'var(--owner)';
+    $('admin-toggle').style.display = 'block';
+    $('admin-name').textContent = currentUser.username;
+    $('user-expiry-info').textContent = '';
   } else if (currentUser.isAdmin) {
-    roleBadge.innerHTML = '<span style="color: var(--r); font-weight: 700;">🛡️ ADMIN</span>';
+    $('user-role-badge').innerHTML = '<span class="admin-badge-tag">\u2B50 ADMIN</span>';
+    $('user-display-name').style.color = 'var(--s)';
+    $('user-avatar').style.borderColor = 'var(--s)';
+    $('admin-toggle').style.display = 'none';
+    if (currentUser.expiresAt) { const d=Math.ceil((new Date(currentUser.expiresAt)-new Date())/(1e3*60*60*24)); $('user-expiry-info').textContent='\u23F0 '+d+' zile'; }
   } else {
-    roleBadge.innerHTML = '<span style="color: var(--g);">✅ MEMBRU</span>';
+    $('user-role-badge').innerHTML = '<span class="member-badge">\u{1F464} MEMBRU</span>';
+    $('user-display-name').style.color = '#5865F2';
+    $('user-avatar').style.borderColor = '#5865F2';
+    $('admin-toggle').style.display = 'none';
+    if (currentUser.expiresAt) {
+      const d=Math.ceil((new Date(currentUser.expiresAt)-new Date())/(1e3*60*60*24));
+      $('user-expiry-info').textContent='\u23F0 '+d+' zile';
+      $('user-expiry-info').style.color = d<=3?'var(--r)':d<=7?'#ffc107':'var(--dm)';
+    }
   }
-  
-  // Afișează controalele admin/owner
-  if (currentUser.isAdmin || currentUser.isOwner) {
-    showAdminControls();
-  }
+  renderMainCategories(); renderDynamicPanels();
 }
 
-function showAdminControls() {
-  $('admin-toggle').style.display = 'block';
-  $('admin-name').textContent = currentUser.username;
-  
-  // Stil special pentru owner
-  if (currentUser.isOwner) {
-    $('admin-toggle').classList.add('owner');
-    $('admin-panel').classList.add('owner');
-    $('admin-role').textContent = '👑 OWNER';
-    $('admin-role').style.color = 'var(--owner)';
-  } else {
-    $('admin-role').textContent = '🛡️ Admin';
-  }
-}
+function logout() { currentUser=null; localStorage.removeItem('craft_current_user'); showLoginScreen(); }
 
-function logout() {
-  currentUser = null;
-  localStorage.removeItem('craft_current_user');
-  showLoginScreen();
-}
+/* ═══════════════════════════════════════════════════════════════
+   ███  ADMIN PANEL  ███
+   ═══════════════════════════════════════════════════════════════ */
 
 function toggleAdmin() {
-  const panel = $('admin-panel');
-  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-  if (panel.style.display === 'block') {
-    updateAdminPanel();
-    renderDataList();
-  }
+  const p = $('admin-panel');
+  if (p.style.display === 'none' || !p.style.display) {
+    p.style.display = 'block';
+    renderMemberList(); renderCategoriesList(); renderDataTabs(); renderDataList(); updateStats();
+  } else p.style.display = 'none';
 }
 
-function updateAdminPanel() {
-  if (!currentUser || !currentUser.isAdmin) return;
-  
-  $('stat-total').textContent = users.length;
-  $('stat-approved').textContent = users.filter(u => u.approved).length;
-  $('stat-pending').textContent = users.filter(u => !u.approved).length;
-  
-  const list = $('user-list');
-  const searchTerm = ($('search-users')?.value || '').toLowerCase();
-  
-  list.innerHTML = '';
-  
-  users
-    .filter(u => u.username.toLowerCase().includes(searchTerm) || u.id.includes(searchTerm))
-    .sort((a, b) => new Date(b.joinedAt) - new Date(a.joinedAt))
-    .forEach(user => {
-      const isOwner = user.id === OWNER_ID;
-      const item = document.createElement('div');
-      item.className = 'user-item ' + (user.approved ? 'approved' : 'pending') + (isOwner ? ' owner' : '');
-      item.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <img src="${user.avatar}" style="width: 28px; height: 28px; border-radius: 50%; ${isOwner ? 'border: 2px solid #ff0000;' : ''}">
-          <div style="text-align: left;">
-            <div style="font-weight: 600; color: ${isOwner ? '#ff0000' : 'var(--tx)'}; font-size: 0.85rem;">
-              ${user.username} ${isOwner ? '👑' : ''}
-            </div>
-            <div style="font-size: 0.7rem; color: var(--dm);">${user.id}</div>
-          </div>
-        </div>
-        <div class="action-btns">
-          ${isOwner ? 
-            `<span style="color: #ff0000; font-size: 0.7rem; font-weight: 700;">OWNER</span>` :
-            `${!user.approved ? 
-              `<button class="action-btn approve-btn" onclick="approveUser('${user.id}')">Aprobă</button>` :
-              `<button class="action-btn remove-btn" onclick="revokeUser('${user.id}')">Revocă</button>`
-            }
-            ${!user.isAdmin && user.approved ? 
-              `<button class="action-btn approve-btn" onclick="makeAdmin('${user.id}')" style="background: var(--a);">Admin</button>` : ''
-            }
-            <button class="action-btn reject-btn" onclick="removeUser('${user.id}')">Șterge</button>`
-          }
-        </div>
-      `;
-      list.appendChild(item);
-    });
+function switchAdminTab(tab) {
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  $('admin-'+tab).classList.add('active');
+  if(tab==='members') renderMemberList();
+  if(tab==='categories') renderCategoriesList();
+  if(tab==='data'){renderDataTabs();renderDataList();}
 }
 
-function approveUser(userId) {
-  const user = users.find(u => u.id === userId);
-  if (user) {
-    user.approved = true;
-    localStorage.setItem('craft_users', JSON.stringify(users));
-    updateAdminPanel();
-    if (currentUser && currentUser.id === userId) checkAccess();
-  }
-}
-
-function revokeUser(userId) {
-  const user = users.find(u => u.id === userId);
-  if (user && user.id !== OWNER_ID) { // Nu poți revoca owner-ul
-    user.approved = false;
-    user.isAdmin = false;
-    localStorage.setItem('craft_users', JSON.stringify(users));
-    updateAdminPanel();
-    if (currentUser && currentUser.id === userId) logout();
-  }
-}
-
-function makeAdmin(userId) {
-  const user = users.find(u => u.id === userId);
-  if (user) {
-    user.isAdmin = true;
-    localStorage.setItem('craft_users', JSON.stringify(users));
-    updateAdminPanel();
-  }
-}
-
-function removeUser(userId) {
-  if (userId === OWNER_ID) {
-    alert('Nu poți șterge OWNER-ul!');
-    return;
-  }
-  if (confirm('Sigur vrei să ștergi acest utilizator?')) {
-    users = users.filter(u => u.id !== userId);
-    localStorage.setItem('craft_users', JSON.stringify(users));
-    updateAdminPanel();
-    if (currentUser && currentUser.id === userId) logout();
-  }
+function updateStats() {
+  const arr=Object.values(members), now=new Date();
+  $('stat-total').textContent=arr.length;
+  $('stat-active').textContent=arr.filter(m=>m.approved&&new Date(m.expiresAt)>now&&!m.blacklisted&&!m.restricted).length;
+  $('stat-pending').textContent=arr.filter(m=>!m.approved&&!m.blacklisted&&!m.restricted&&m.status!=='expired').length;
+  $('stat-blacklisted').textContent=arr.filter(m=>m.blacklisted).length;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   ███  MANAGER DATE (EXISTENT)  ███
+   ███  MEMBER MANAGEMENT  ███
    ═══════════════════════════════════════════════════════════════ */
 
-function switchDataCategory(category) {
-  currentDataCategory = category;
-  document.querySelectorAll('.cat-tab').forEach(tab => tab.classList.remove('active'));
-  event.target.classList.add('active');
-  renderDataList();
+function getMemberStatus(m) {
+  if(m.blacklisted) return 'blacklisted';
+  if(m.restricted) return 'restricted';
+  if(m.approved && new Date(m.expiresAt)>new Date()) return 'active';
+  if(m.approved || m.status==='expired') return 'expired';
+  return 'pending';
+}
+
+function filterMembers(q){memberSearchQuery=q.toLowerCase();renderMemberList();}
+function setMemberFilter(f,btn){currentMemberFilter=f;document.querySelectorAll('.admin-filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderMemberList();}
+
+function renderMemberList() {
+  const c=$('member-list'); c.innerHTML='';
+  let arr=Object.values(members);
+  if(memberSearchQuery) arr=arr.filter(m=>m.username.toLowerCase().includes(memberSearchQuery)||m.id.includes(memberSearchQuery));
+  if(currentMemberFilter!=='all') arr=arr.filter(m=>getMemberStatus(m)===currentMemberFilter);
+  const ord={pending:0,active:1,expired:2,restricted:3,blacklisted:4};
+  arr.sort((a,b)=>(ord[getMemberStatus(a)]||5)-(ord[getMemberStatus(b)]||5));
+  
+  if(!arr.length){c.innerHTML='<div style="text-align:center;padding:25px;color:var(--dm);font-size:.85rem;">Niciun membru gasit</div>';return;}
+  
+  arr.forEach(m=>{
+    const st=getMemberStatus(m);
+    const item=document.createElement('div');
+    let cls='member-item';
+    if(st==='pending') cls+=' pending-item';
+    if(st==='blacklisted') cls+=' blacklisted-item';
+    if(st==='restricted') cls+=' restricted-item';
+    if(m.isAdmin&&st==='active') cls+=' admin-item';
+    if(st==='expired') cls+=' expired-item';
+    item.className=cls;
+    
+    let badge='';
+    switch(st){
+      case 'active': badge=m.isAdmin?'<span class="member-status admin-status">\u2B50 Admin</span>':'<span class="member-status active">\u2705 Activ</span>'; break;
+      case 'pending': badge='<span class="member-status pending">\u23F3 Asteptare</span>'; break;
+      case 'expired': badge='<span class="member-status expired">\u23F0 Expirat</span>'; break;
+      case 'blacklisted': badge='<span class="member-status blacklisted">\u{1F6AB} Blacklist</span>'; break;
+      case 'restricted': badge='<span class="member-status restricted">\u26D4 Restrict</span>'; break;
+    }
+    
+    let exp='';
+    if(m.expiresAt&&st==='active'){const d=Math.ceil((new Date(m.expiresAt)-new Date())/(1e3*60*60*24));exp=`<div class="member-expiry ${d<=3?'expired':d<=7?'expiring-soon':''}">&bull; ${d} zile (exp: ${new Date(m.expiresAt).toLocaleDateString('ro-RO')})</div>`;}
+    if(st==='restricted'&&m.restrictedPermanent) exp='<div class="member-expiry expired">&bull; Permanent</div>';
+    else if(st==='restricted'&&m.restrictedUntil) exp=`<div class="member-expiry expired">&bull; Pana: ${new Date(m.restrictedUntil).toLocaleDateString('ro-RO')}</div>`;
+    
+    let acts='';
+    if(st==='pending') acts=`<button class="m-action-btn approve" onclick="approveMember('${m.id}')">\u2705 Aproba</button><button class="m-action-btn blacklist" onclick="blacklistMember('${m.id}')">\u{1F6AB}</button><button class="m-action-btn delete" onclick="deleteMember('${m.id}')">\u{1F5D1}</button>`;
+    else if(st==='active') acts=`<button class="m-action-btn make-admin" onclick="toggleAdminMember('${m.id}')">${m.isAdmin?'\u{1F464}':'\u2B50'}</button><button class="m-action-btn restrict" onclick="openRestrictModal('${m.id}')">\u26D4</button><button class="m-action-btn blacklist" onclick="blacklistMember('${m.id}')">\u{1F6AB}</button><button class="m-action-btn delete" onclick="deleteMember('${m.id}')">\u{1F5D1}</button>`;
+    else if(st==='expired') acts=`<button class="m-action-btn reactivate" onclick="approveMember('${m.id}')">\u{1F504}</button><button class="m-action-btn blacklist" onclick="blacklistMember('${m.id}')">\u{1F6AB}</button><button class="m-action-btn delete" onclick="deleteMember('${m.id}')">\u{1F5D1}</button>`;
+    else if(st==='restricted') acts=`<button class="m-action-btn reactivate" onclick="unrestrictMember('${m.id}')">\u{1F513}</button><button class="m-action-btn blacklist" onclick="blacklistMember('${m.id}')">\u{1F6AB}</button><button class="m-action-btn delete" onclick="deleteMember('${m.id}')">\u{1F5D1}</button>`;
+    else if(st==='blacklisted') acts=`<button class="m-action-btn reactivate" onclick="unblacklistMember('${m.id}')">\u{1F513}</button><button class="m-action-btn delete" onclick="deleteMember('${m.id}')">\u{1F5D1}</button>`;
+    
+    const fallbackAvatar="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%235865F2' width='100' height='100'/><text y='.9em' x='50' text-anchor='middle' font-size='60'>\u{1F464}</text></svg>";
+    
+    item.innerHTML=`
+      <img src="${m.avatar}" class="member-avatar ${m.isAdmin?'admin':''}" onerror="this.src=\"${fallbackAvatar}\"">
+      <div class="member-info">
+        <div class="member-name">${m.username} ${badge}</div>
+        <div class="member-meta">ID: ${m.id} &bull; x${m.loginCount||0} &bull; ${new Date(m.joinedAt).toLocaleDateString('ro-RO')}</div>
+        ${exp}
+      </div>
+      <div class="member-actions">${acts}</div>`;
+    c.appendChild(item);
+  });
+  updateStats();
+}
+
+function approveMember(id) {
+  if(!members[id]) return;
+  members[id].approved=true; members[id].status='active';
+  members[id].expiresAt=new Date(Date.now()+ACCESS_DURATION_MS).toISOString();
+  members[id].approvedAt=new Date().toISOString();
+  saveMembers(); renderMemberList();
+  showNotification('\u2705 '+members[id].username+' - acces '+ACCESS_DURATION_DAYS+' zile!');
+}
+
+function toggleAdminMember(id) {
+  if(!members[id]) return;
+  members[id].isAdmin=!members[id].isAdmin;
+  saveMembers(); renderMemberList();
+  showNotification((members[id].isAdmin?'\u2B50':'\u{1F464}')+' '+members[id].username+(members[id].isAdmin?' este Admin':' nu mai e Admin'));
+}
+
+function openRestrictModal(id) {
+  restrictingMemberId=id; const m=members[id]; if(!m) return;
+  $('restrict-content').innerHTML=`
+    <div style="padding:12px;background:rgba(0,0,0,.2);border-radius:10px;margin-bottom:15px;display:flex;align-items:center;gap:10px;">
+      <img src="${m.avatar}" style="width:36px;height:36px;border-radius:50%;">
+      <div><b>${m.username}</b><br><span style="font-size:.7rem;color:var(--dm)">ID: ${m.id}</span></div>
+    </div>
+    <div class="form-group"><label>Tip</label><select id="restrict-type" onchange="$('restrict-dur').style.display=this.value==='permanent'?'none':'block'"><option value="temporary">Temporara</option><option value="permanent">Permanenta</option></select></div>
+    <div class="form-group" id="restrict-dur"><label>Zile</label><input type="number" id="restrict-days" value="7" min="1" max="365"></div>
+    <div class="form-group"><label>Motiv</label><textarea id="restrict-reason" placeholder="Optional..."></textarea></div>`;
+  $('restrict-modal').classList.add('active');
+}
+
+function confirmRestrict() {
+  if(!restrictingMemberId||!members[restrictingMemberId]) return;
+  const type=$('restrict-type').value, days=parseInt($('restrict-days')?.value)||7;
+  const m=members[restrictingMemberId];
+  m.restricted=true; m.approved=false; m.status='restricted';
+  m.restrictedPermanent=type==='permanent';
+  m.restrictedUntil=type==='permanent'?null:new Date(Date.now()+days*864e5).toISOString();
+  m.restrictReason=$('restrict-reason')?.value||'';
+  m.isAdmin=false;
+  saveMembers(); closeRestrictModal(); renderMemberList();
+  showNotification('\u26D4 '+m.username+' restrictionat'+(type==='permanent'?' permanent':' '+days+' zile'));
+}
+
+function closeRestrictModal(){$('restrict-modal').classList.remove('active');restrictingMemberId=null;}
+function unrestrictMember(id){if(!members[id])return;members[id].restricted=false;members[id].restrictedUntil=null;members[id].restrictedPermanent=false;members[id].status='pending';saveMembers();renderMemberList();showNotification('\u{1F513} '+members[id].username+' deblocat!');}
+function blacklistMember(id){if(!members[id])return;if(!confirm('Blacklist "'+members[id].username+'"?'))return;members[id].blacklisted=true;members[id].approved=false;members[id].restricted=false;members[id].isAdmin=false;members[id].status='blacklisted';saveMembers();renderMemberList();showNotification('\u{1F6AB} '+members[id].username+' BLACKLISTED!');}
+function unblacklistMember(id){if(!members[id])return;members[id].blacklisted=false;members[id].status='pending';saveMembers();renderMemberList();showNotification('\u{1F513} '+members[id].username+' scos din blacklist!');}
+function deleteMember(id){if(!members[id])return;if(!confirm('STERGE DEFINITIV "'+members[id].username+'"?'))return;const n=members[id].username;delete members[id];saveMembers();renderMemberList();showNotification('\u{1F5D1} '+n+' sters!');}
+function clearExpiredMembers(){const exp=Object.values(members).filter(m=>getMemberStatus(m)==='expired');if(!exp.length){alert('Niciun membru expirat!');return;}if(!confirm('Sterge '+exp.length+' membri expirat?'))return;exp.forEach(m=>delete members[m.id]);saveMembers();renderMemberList();showNotification('\u{1F5D1} '+exp.length+' stersi!');}
+function exportMembers(){const d={members,exportDate:new Date().toISOString()};const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});const l=document.createElement('a');l.href=URL.createObjectURL(b);l.download='craft_members_'+new Date().toISOString().split('T')[0]+'.json';l.click();showNotification('\u{1F465} Membri exportati!');}
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  RANDARE CATEGORII IN MAIN APP  ███
+   ═══════════════════════════════════════════════════════════════ */
+
+function renderMainCategories() {
+  const container = $('main-categories');
+  container.innerHTML = '';
+  
+  categories.forEach((cat, index) => {
+    const btn = document.createElement('div');
+    btn.className = `cat-group-btn ${cat.color} ${index === 0 ? 'on' : ''}`;
+    btn.onclick = () => showCategory(cat.id);
+    btn.innerHTML = `
+      <span class="cg-icon">${cat.icon}</span>${cat.name}
+      <div class="cg-sub">${cat.sub}</div>
+    `;
+    container.appendChild(btn);
+  });
+}
+
+function renderDynamicPanels() {
+  const container = $('dynamic-panels');
+  container.innerHTML = '';
+  
+  categories.forEach((cat, index) => {
+    const panel = document.createElement('div');
+    panel.className = `cat-panel ${index === 0 ? 'on' : ''}`;
+    panel.id = `panel_${cat.id}`;
+    
+    // Conținut specific categoriei
+    let content = '';
+    if (cat.id === 'mafie') {
+      content = renderMafieContent();
+    } else if (cat.id === 'legal') {
+      content = renderLegalContent();
+    } else {
+      content = renderGenericContent(cat);
+    }
+    
+    panel.innerHTML = content;
+    container.appendChild(panel);
+  });
+}
+
+function renderMafieContent() {
+  return `
+    <div class="sub-tabs mafie" id="tabs_mafie">
+      <div class="tb on" onclick="switchSubTab('mafie', 'cocaina')">💎 Cocaina</div>
+      <div class="tb" onclick="switchSubTab('mafie', 'gloante')">🎯 Gloante</div>
+      <div class="tb" onclick="switchSubTab('mafie', 'arme')">🔫 Arme</div>
+      <div class="tb" onclick="switchSubTab('mafie', 'comp')">⚙️ Componente</div>
+    </div>
+    <div class="pn on" id="mafie_cocaina">
+      <div class="sc gn">
+        <div class="st green">💎 Calculator Procesare Cocaina</div>
+        <div class="ir">
+          <div class="ig">
+            <label>🌿 Numar frunze de coca</label>
+            <input type="number" id="cI" placeholder="560" min="0" value="560" oninput="cC()">
+          </div>
+        </div>
+        <div class="ib">✨ Introdu numarul de frunze pentru a calcula intregul proces</div>
+      </div>
+      <div class="gr g3" id="cCards"></div>
+      <div class="sm">
+        <div class="sm-t">📊 Sumar Final</div>
+        <div class="sg">
+          <div class="si"><div class="lb">Total KG Procesate</div><div class="sv" id="cK">0.00</div></div>
+          <div class="si"><div class="lb">Total Plicuri</div><div class="sv gl" id="cP">0</div></div>
+          <div class="si"><div class="lb">Profit Estimat</div><div class="sv gn" id="cF">$0</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="pn" id="mafie_gloante">
+      <div class="sc hl">
+        <div class="st">🎯 Selecteaza Calibrul</div>
+        <div class="bs" id="bBtns"></div>
+      </div>
+      <div class="sc">
+        <div class="ir">
+          <div class="ig">
+            <label>🔢 Cate gloante vrei?</label>
+            <input type="number" id="bI" placeholder="100" min="0" value="100" oninput="cB()">
+          </div>
+          <div class="mc bl"><div class="nm">Carcase Necesare</div><div class="vl" id="bC">0</div></div>
+          <div class="mc gn"><div class="nm">Gloante Produse</div><div class="vl" id="bP">0</div></div>
+        </div>
+      </div>
+      <div class="gr g3">
+        <div class="mc cu"><div class="ic">🥉</div><div class="nm">Cupru</div><div class="vl" id="bCu">0</div></div>
+        <div class="mc lead"><div class="ic">⚙️</div><div class="nm">Plumb</div><div class="vl" id="bPb">0</div></div>
+        <div class="mc gp"><div class="ic">💥</div><div class="nm">Praf de Pusca</div><div class="vl" id="bPr">0</div></div>
+      </div>
+    </div>
+    <div class="pn" id="mafie_arme">
+      <div class="sc hl">
+        <div class="st">🔫 Calculator Craft Arme</div>
+        <div class="ir">
+          <div class="ig"><label>Selecteaza Arma</label><select id="aS" onchange="cA()"></select></div>
+          <div class="ig"><label>Cantitate</label><input type="number" id="aQ" value="1" min="1" max="100" oninput="cA()"></div>
+        </div>
+      </div>
+      <div id="aR"></div>
+    </div>
+    <div class="pn" id="mafie_comp">
+      <div class="sc hl"><div class="st">⚙️ Componente & Materiale Arme</div></div>
+      <div id="cT"></div>
+    </div>
+  `;
+}
+
+function renderLegalContent() {
+  return `
+    <div class="sub-tabs legal" id="tabs_legal">
+      <div class="tb on" onclick="switchSubTab('legal', 'masa')">🔨 Masa Craft</div>
+      <div class="tb" onclick="switchSubTab('legal', 'loc')">📍 Locatii</div>
+    </div>
+    <div class="pn on" id="legal_masa">
+      <div class="sc hl"><div class="st gold">🔨 Retete Masa de Craft</div></div>
+      <div id="mT"></div>
+    </div>
+    <div class="pn" id="legal_loc">
+      <div class="sc hl"><div class="st cyan">📍 Locatii Materiale</div></div>
+      <div id="lT"></div>
+    </div>
+  `;
+}
+
+function renderGenericContent(cat) {
+  const data = APP_DATA[cat.id.toUpperCase()] || {};
+  const hasData = Object.keys(data).length > 0;
+  
+  return `
+    <div class="sc hl">
+      <div class="st">${cat.icon} ${cat.name}</div>
+      <div class="ib">
+        ${hasData ? 'Selecteaza o optiune de mai jos' : 'Nu exista date in aceasta categorie. Adauga din panoul OWNER.'}
+      </div>
+    </div>
+    ${hasData ? '<div class="gr g3">' + Object.keys(data).map(k => `
+      <div class="mc bl" onclick="alert('Detalii pentru: ${k}')">
+        <div class="ic">📦</div>
+        <div class="nm">${k}</div>
+      </div>
+    `).join('') + '</div>' : ''}
+  `;
+}
+
+function showCategory(catId) {
+  // Update buttons
+  document.querySelectorAll('.cat-group-btn').forEach(btn => btn.classList.remove('on'));
+  event.currentTarget.classList.add('on');
+  
+  // Update panels
+  document.querySelectorAll('.cat-panel').forEach(p => p.classList.remove('on'));
+  const panel = $(`panel_${catId}`);
+  if (panel) panel.classList.add('on');
+}
+
+function switchSubTab(category, tabId) {
+  const container = $(`panel_${category}`);
+  container.querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
+  event.target.classList.add('on');
+  
+  container.querySelectorAll('.pn').forEach(p => p.classList.remove('on'));
+  const panel = $(`${category}_${tabId}`);
+  if (panel) panel.classList.add('on');
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  MANAGER DATE  ███
+   ═══════════════════════════════════════════════════════════════ */
+
+function renderDataTabs() {
+  const container = $('data-categories');
+  container.innerHTML = '';
+  
+  // Tab-uri pentru fiecare tip de date
+  const dataTypes = [
+    ['arme', '🔫 Arme'],
+    ['munitie', '🎯 Munitie'],
+    ['componente', '⚙️ Componente'],
+    ['masa', '🔨 Masa Craft'],
+    ['locatii', '📍 Locatii']
+  ];
+  
+  dataTypes.forEach(([id, label]) => {
+    const tab = document.createElement('div');
+    tab.className = 'cat-tab ' + (id === currentDataCategory ? 'active' : '');
+    tab.textContent = label;
+    tab.onclick = () => {
+      currentDataCategory = id;
+      renderDataTabs();
+      renderDataList();
+    };
+    container.appendChild(tab);
+  });
 }
 
 function renderDataList() {
@@ -1351,6 +1714,7 @@ function renderDataList() {
 }
 
 function renderItemHTML(key, value) {
+  // ... (la fel ca înainte)
   let meta = '';
   switch(currentDataCategory) {
     case 'arme':
@@ -1408,6 +1772,7 @@ function renderItemHTML(key, value) {
 }
 
 function openAddModal() {
+  modalMode = 'data';
   editingItem = null;
   $('modal-title').textContent = `Adauga ${getCategoryLabel()}`;
   $('modal-content').innerHTML = generateFormFields();
@@ -1415,6 +1780,7 @@ function openAddModal() {
 }
 
 function editItem(key) {
+  modalMode = 'data';
   editingItem = key;
   $('modal-title').textContent = `Editeaza ${getCategoryLabel()}`;
   $('modal-content').innerHTML = generateFormFields(key);
@@ -1424,6 +1790,7 @@ function editItem(key) {
 function closeModal() {
   $('modal-overlay').classList.remove('active');
   editingItem = null;
+  modalMode = 'data';
 }
 
 function getCategoryLabel() {
@@ -1438,6 +1805,7 @@ function getCategoryLabel() {
 }
 
 function generateFormFields(editKey = null) {
+  // ... (la fel ca înainte, dar folosește var(--owner) în loc de var(--a) pentru focus)
   let data = null;
   if (editKey) {
     switch(currentDataCategory) {
@@ -1456,7 +1824,6 @@ function generateFormFields(editKey = null) {
              placeholder="Ex: Combat Pistol, 9mm, etc">
     </div>
   `;
-  
   switch(currentDataCategory) {
     case 'arme':
       const categories = ['Pistol', 'SMG', 'Rifle', 'Shotgun', 'Heavy', 'MG', 'Special'];
@@ -1650,6 +2017,11 @@ function addLocMaterialField() {
 }
 
 function saveData() {
+  if (modalMode === 'category') {
+    saveCategory();
+    return;
+  }
+  
   const name = $('field-name').value.trim();
   if (!name) {
     alert('Numele este obligatoriu!');
@@ -1724,7 +2096,6 @@ function saveData() {
         break;
     }
     
-    // Salvează în obiectul corespunzător
     switch(currentDataCategory) {
       case 'arme': ARME[name] = newData; break;
       case 'munitie': MUNITIE[name] = newData; break;
@@ -1768,10 +2139,18 @@ function refreshAppUI() {
   initComp();
   initM();
   initL();
+  renderDynamicPanels();
 }
 
 function exportData() {
-  const dataStr = JSON.stringify(APP_DATA, null, 2);
+  const exportObj = {
+    categories: categories,
+    data: APP_DATA,
+    exportDate: new Date().toISOString(),
+    exportedBy: currentUser?.username || 'Unknown'
+  };
+  
+  const dataStr = JSON.stringify(exportObj, null, 2);
   const dataBlob = new Blob([dataStr], {type: 'application/json'});
   const url = URL.createObjectURL(dataBlob);
   const link = document.createElement('a');
@@ -1782,31 +2161,61 @@ function exportData() {
   showNotification('💾 Date exportate cu succes!');
 }
 
-function resetToDefault() {
-  if (!confirm('⚠️ SIGUR vrei să resetezi TOATE datele la valorile default? Această acțiune nu poate fi anulată!')) return;
+function importData() {
+  $('import-file').click();
+}
+
+function handleImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
   
-  APP_DATA = JSON.parse(JSON.stringify(DEFAULT_DATA));
-  MUNITIE = APP_DATA.MUNITIE;
-  ARME = APP_DATA.ARME;
-  COMP = APP_DATA.COMP;
-  MATARME = APP_DATA.MATARME;
-  MASA = APP_DATA.MASA;
-  LOC = APP_DATA.LOC;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      
+      if (imported.categories) {
+        categories = imported.categories;
+        saveCategories();
+      }
+      
+      if (imported.data) {
+        APP_DATA = imported.data;
+        MUNITIE = APP_DATA.MUNITIE;
+        ARME = APP_DATA.ARME;
+        COMP = APP_DATA.COMP;
+        MATARME = APP_DATA.MATARME;
+        MASA = APP_DATA.MASA;
+        LOC = APP_DATA.LOC;
+        saveAppData();
+      }
+      
+      renderCategoriesList();
+      renderMainCategories();
+      renderDynamicPanels();
+      renderDataTabs();
+      renderDataList();
+      refreshAppUI();
+      
+      showNotification('📥 Date importate cu succes!');
+    } catch (err) {
+      alert('Eroare la import: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
   
-  saveAppData();
-  renderDataList();
-  refreshAppUI();
-  showNotification('🔄 Date resetate la valorile default!');
+  // Reset input
+  event.target.value = '';
 }
 
 function showNotification(message) {
   const notif = document.createElement('div');
   notif.style.cssText = `
     position: fixed; bottom: 20px; right: 20px; z-index: 10002;
-    background: linear-gradient(135deg, var(--g), #00cc6a);
-    color: #000; padding: 16px 24px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--owner), #990000);
+    color: white; padding: 16px 24px; border-radius: 12px;
     font-family: 'Rajdhani', sans-serif; font-weight: 700;
-    box-shadow: 0 10px 30px rgba(0,255,136,.3);
+    box-shadow: 0 10px 30px var(--owner-glow);
     animation: slideIn 0.3s ease;
   `;
   notif.textContent = message;
@@ -1818,9 +2227,6 @@ function showNotification(message) {
   }, 3000);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   ███  APLICATIA PRINCIPALA  ███
-   ═══════════════════════════════════════════════════════════════ */
 
 const $ = id => document.getElementById(id);
 const F = n => Math.floor(n).toLocaleString('ro-RO');
@@ -1835,62 +2241,10 @@ function catBadge(cat) {
   return `<span class="cat-badge ${map[c]||'special'}">${cat}</span>`;
 }
 
-const MAFIE_TABS = [
-  ['cocaina',  '💎 Cocaina'],
-  ['gloante',  '🎯 Gloante'],
-  ['arme',     '🔫 Arme'],
-  ['comp',     '⚙️ Componente'],
-];
-
-const LEGAL_TABS = [
-  ['masa', '🔨 Masa Craft'],
-  ['loc',  '📍 Locatii'],
-];
-
-let currentGroup = 'mafie';
-
-function showGroup(group) {
-  currentGroup = group;
-  document.querySelectorAll('.cat-group-btn').forEach(b => b.classList.remove('on'));
-  document.querySelector(`.cat-group-btn.${group}`).classList.add('on');
-  document.querySelectorAll('.cat-panel').forEach(p => p.classList.remove('on'));
-  $('g_' + group).classList.add('on');
-  const tabs = group === 'mafie' ? MAFIE_TABS : LEGAL_TABS;
-  if (tabs.length > 0) switchSubTab(group, tabs[0][0]);
-}
-
-function buildSubTabs(containerId, tabs, group) {
-  const c = $(containerId);
-  c.innerHTML = '';
-  tabs.forEach(([k, l], i) => {
-    const b = document.createElement('div');
-    b.className = 'tb' + (i === 0 ? ' on' : '');
-    b.textContent = l;
-    b.dataset.tab = k;
-    b.dataset.group = group;
-    b.onclick = () => switchSubTab(group, k);
-    c.appendChild(b);
-  });
-}
-
-function switchSubTab(group, tabId) {
-  const container = $('g_' + group);
-  container.querySelectorAll('.sub-tabs .tb').forEach(b => {
-    b.classList.toggle('on', b.dataset.tab === tabId);
-  });
-  container.querySelectorAll('.pn').forEach(p => p.classList.remove('on'));
-  const panel = $('p_' + tabId);
-  if (panel) panel.classList.add('on');
-}
-
-function initNavigation() {
-  buildSubTabs('mafie_tabs', MAFIE_TABS, 'mafie');
-  buildSubTabs('legal_tabs', LEGAL_TABS, 'legal');
-}
-
 let curB = Object.keys(MUNITIE)[0] || '9mm';
 function initB() {
   const c = $('bBtns');
+  if (!c) return;
   c.innerHTML = '';
   Object.entries(MUNITIE).forEach(([k, v]) => {
     const b = document.createElement('div');
@@ -1905,13 +2259,13 @@ function initB() {
   });
 }
 function cB() {
-  const w = parseInt($('bI').value) || 0, cfg = MUNITIE[curB]; if (!cfg) return;
+  const w = parseInt($('bI')?.value) || 0, cfg = MUNITIE[curB]; if (!cfg) return;
   const ca = Math.ceil(w / cfg.gpc), pr = ca * cfg.gpc;
   const cu = ca * cfg.cu, pb = ca * cfg.pb, pf = ca * cfg.pr;
   A('bC', F(ca)); A('bP', F(pr));
   A('bCu', F(cu)); A('bPb', F(pb)); A('bPr', F(pf));
   A('bT', curB); A('bQ', F(w)); A('bTP', F(pr)); A('bTM', F(cu + pb + pf));
-  $('bR').textContent = cfg.ret;
+  if ($('bR')) $('bR').textContent = cfg.ret;
 }
 
 const COCA_STEPS = [
@@ -1924,17 +2278,18 @@ const COCA_STEPS = [
 ];
 function initC() {
   const c = $('cCards');
+  if (!c) return;
   c.innerHTML = '';
   COCA_STEPS.forEach((s, i) => {
     c.innerHTML += `<div class="mc ${s[2]}"><div class="ic">${s[1]}</div><div class="nm">${s[0]}</div><div class="vl" id="cc${i}">0</div><div class="un" id="ck${i}">0.00 kg</div></div>`;
   });
 }
 function cC() {
-  const f = parseInt($('cI').value) || 0;
+  const f = parseInt($('cI')?.value) || 0;
   const fk=.04*f, sn=.05*f, sk=.4*sn, tn=sn, tk=.3*tn;
   const bn=tn, bk=.2*bn, pn=2*bn, pk=.03*pn, ln=pn, lk=.2*ln;
   const vals = [[f,fk],[sn,sk],[tn,tk],[bn,bk],[pn,pk],[ln,lk]];
-  vals.forEach(([n,k], i) => { A('cc'+i, F(Math.floor(n))); $('ck'+i).textContent = k.toFixed(2)+' kg' });
+  vals.forEach(([n,k], i) => { A('cc'+i, F(Math.floor(n))); if ($('ck'+i)) $('ck'+i).textContent = k.toFixed(2)+' kg' });
   A('cK', (fk+sk+tk+bk+pk).toFixed(2));
   A('cP', F(Math.floor(ln)));
   A('cF', '$' + F(Math.floor(ln * 13600)));
@@ -1942,6 +2297,7 @@ function cC() {
 
 function initA() {
   const s = $('aS');
+  if (!s) return;
   s.innerHTML = '';
   const cats = {};
   Object.entries(ARME).forEach(([k, v]) => {
@@ -1956,7 +2312,7 @@ function initA() {
   });
 }
 function cA() {
-  const n = $('aS').value, q = parseInt($('aQ').value) || 1, a = ARME[n]; if (!a) return;
+  const n = $('aS')?.value, q = parseInt($('aQ')?.value) || 1, a = ARME[n]; if (!a) return;
   let h = `<div class="sc"><div class="st">${n} × ${q}</div>
   <div class="ib">Categorie: ${catBadge(a.cat)} &nbsp; Munitie: <b style="color:var(--s)">${a.mun}</b></div>
   <table><tr><th>Piesa</th><th>Per Arma</th><th>Total (×${q})</th></tr>`;
@@ -1970,10 +2326,11 @@ function cA() {
   if (m) h += `<div class="sc"><div class="st cyan">🎯 Munitie Recomandata: ${a.mun}</div>
   <div class="rc"><b>${m.ret}</b></div>
   <div class="ib">Foloseste tab-ul <b>🎯 Gloante</b> pentru calculator detaliat munitie</div></div>`;
-  $('aR').innerHTML = h;
+  if ($('aR')) $('aR').innerHTML = h;
 }
 
 function initComp() {
+  if (!$('cT')) return;
   let h = `<div class="sc"><div class="st cyan">🔩 Componente Craft</div>
   <table><tr><th>Componenta</th><th>Materiale Necesare</th><th>Descriere</th></tr>`;
   Object.entries(COMP).forEach(([k, v]) => {
@@ -1992,6 +2349,7 @@ function initComp() {
 }
 
 function initM() {
+  if (!$('mT')) return;
   const cats = {};
   Object.entries(MASA).forEach(([k, v]) => {
     if (!cats[v.cat]) cats[v.cat] = [];
@@ -2018,6 +2376,7 @@ function initM() {
 }
 
 function initL() {
+  if (!$('lT')) return;
   let h = '<div class="gr g2">';
   Object.entries(LOC).forEach(([k, v]) => {
     h += `<div class="mc bl" style="text-align:left;padding:20px">
@@ -2088,22 +2447,8 @@ if (window.location.hash.includes('access_token')) {
   handleDiscordCallback();
 } else {
   initParticles();
-  initNavigation();
-  initB(); cB();
-  initC(); cC();
-  initA(); cA();
-  initComp();
-  initM();
-  initL();
   checkAccess();
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  const searchInput = $('search-users');
-  if (searchInput) {
-    searchInput.addEventListener('input', updateAdminPanel);
-  }
-});
 </script>
 </body>
 </html>
