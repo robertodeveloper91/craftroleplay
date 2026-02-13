@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CRAFT ROLEPLAY — Calculator Profesional 2026</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔫</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   CRAFT ROLEPLAY 2026 — DESIGN UNIC
+   Tema: Cyber-Military Dark UI
+   ═══════════════════════════════════════════════ */
+:root {
+  --p: #ff6b35; --pd: #cc5529; --s: #ffd700; --a: #00d4ff;
+  --g: #00ff88; --r: #ff3366; --violet: #b44dff;
+  --cu: #b87333; --pb: #6b7b8c; --gunp: #7a7a7a;
+  --bg: #060610; --bg2: #0c0c18; --cd: #10101c; --cd2: #161625;
+  --inp: #1a1a2a; --tx: #eeeef6; --dm: #6b6b8a; --bd: #252540;
+  --glow-p: rgba(255,107,53,.4); --glow-s: rgba(255,215,0,.4);
+  --glow-a: rgba(0,212,255,.4); --glow-g: rgba(0,255,136,.4);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
+html { scroll-behavior: smooth }
+body {
+  font-family: 'Rajdhani', 'Segoe UI', sans-serif;
+  background: var(--bg); color: var(--tx);
+  min-height: 100vh; overflow-x: hidden;
+  font-size: 16px; line-height: 1.5;
+}
+
+/* === ANIMATED BACKGROUND === */
+#particles { position:fixed; inset:0; z-index:0; pointer-events:none }
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse at 10% 10%, rgba(255,107,53,.06) 0%, transparent 40%),
+    radial-gradient(ellipse at 90% 20%, rgba(0,212,255,.05) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 90%, rgba(255,215,0,.04) 0%, transparent 40%),
+    radial-gradient(ellipse at 70% 50%, rgba(180,77,255,.03) 0%, transparent 40%);
+}
+body::after {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,107,53,.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,.012) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* === CONTAINER === */
+.ct { max-width:1020px; margin:0 auto; padding:30px 20px; position:relative; z-index:1 }
+
+/* === HEADER === */
+.hd { text-align:center; margin-bottom:28px; position:relative; padding:30px 0 }
+.hd::before {
+  content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:80px; height:3px;
+  background: linear-gradient(90deg, transparent, var(--p), var(--s), var(--a), transparent);
+}
+.hd::after {
+  content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+  width:60%; height:1px;
+  background: linear-gradient(90deg, transparent, var(--bd), transparent);
+}
+.hd .logo {
+  font-family: 'Orbitron', monospace; font-size: clamp(1.8rem,5vw,2.8rem);
+  font-weight: 900; letter-spacing: 6px; text-transform: uppercase;
+  background: linear-gradient(135deg, var(--p) 0%, var(--s) 40%, var(--a) 70%, var(--g) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 30px var(--glow-p));
+  animation: logoGlow 4s ease-in-out infinite alternate;
+}
+@keyframes logoGlow {
+  0% { filter: drop-shadow(0 0 20px var(--glow-p)) }
+  50% { filter: drop-shadow(0 0 30px var(--glow-s)) }
+  100% { filter: drop-shadow(0 0 20px var(--glow-a)) }
+}
+.hd .sub {
+  font-family: 'JetBrains Mono', monospace; font-size: .8rem;
+  color: var(--dm); letter-spacing: 4px; margin-top: 8px; text-transform: uppercase;
+}
+.hd .version {
+  display: inline-block; margin-top:10px; padding: 4px 14px;
+  background: linear-gradient(135deg, rgba(255,107,53,.15), rgba(0,212,255,.1));
+  border: 1px solid rgba(255,107,53,.3); border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace; font-size: .65rem;
+  color: var(--a); letter-spacing: 2px;
+}
+
+/* === BRAND BAR === */
+.br {
+  display:flex; justify-content:center; align-items:center; gap:16px; flex-wrap:wrap;
+  margin: 0 0 24px; padding: 14px 20px;
+  background: linear-gradient(135deg, rgba(255,215,0,.08), rgba(255,107,53,.04), rgba(0,212,255,.04));
+  border: 1px solid rgba(255,215,0,.25); border-radius: 14px;
+  position:relative; overflow:hidden;
+}
+.br::before {
+  content:''; position:absolute; top:0; left:0; width:100%; height:2px;
+  background: linear-gradient(90deg, var(--p), var(--s), var(--a), var(--g));
+}
+.br::after {
+  content:''; position:absolute; bottom:0; left:0; width:100%; height:1px;
+  background: linear-gradient(90deg, transparent, rgba(255,215,0,.2), transparent);
+}
+.br .tag { color:var(--s); font-family:'Orbitron',monospace; font-weight:700; font-size:.85rem; letter-spacing:1px }
+.br .sep { color:rgba(255,255,255,.15); font-size:.8rem }
+.br a { color:var(--a); text-decoration:none; font-family:'JetBrains Mono',monospace; font-weight:700; font-size:.85rem; transition:.3s }
+.br a:hover { color:var(--s); text-shadow:0 0 15px var(--glow-a) }
+.br .ref { color:var(--g); font-family:'Orbitron',monospace; font-weight:700; font-size:.85rem }
+.br .srv { color:var(--p); font-family:'Rajdhani',sans-serif; font-weight:700; font-size:.85rem; text-transform:uppercase; letter-spacing:2px }
+
+/* === TABS === */
+.tabs {
+  display:flex; gap:6px; flex-wrap:wrap; justify-content:center;
+  margin-bottom:24px; padding:14px 12px;
+  background: linear-gradient(180deg, var(--cd), var(--bg2));
+  border: 1px solid var(--bd); border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+.tb {
+  padding:11px 20px; font-family:'Rajdhani',sans-serif; font-size:.92rem; font-weight:700;
+  border:2px solid var(--bd); border-radius:10px;
+  background: var(--inp); color:var(--dm);
+  cursor:pointer; transition:all .3s ease;
+  display:flex; align-items:center; gap:6px; letter-spacing:.5px;
+  position:relative; overflow:hidden;
+}
+.tb::before {
+  content:''; position:absolute; bottom:0; left:50%; width:0; height:2px;
+  background:var(--s); transition:all .3s; transform:translateX(-50%);
+}
+.tb:hover { border-color:var(--p); color:var(--tx); transform:translateY(-2px); box-shadow:0 4px 15px rgba(255,107,53,.15) }
+.tb:hover::before { width:60% }
+.tb.on {
+  border-color:var(--s); color:var(--s);
+  background: linear-gradient(135deg, rgba(255,215,0,.12), rgba(255,107,53,.06));
+  box-shadow: 0 0 20px rgba(255,215,0,.2), inset 0 0 20px rgba(255,215,0,.05);
+}
+.tb.on::before { width:80%; background:var(--s) }
+
+/* === PANELS === */
+.pn { display:none; animation:panelIn .5s cubic-bezier(.22,1,.36,1) }
+.pn.on { display:block }
+@keyframes panelIn { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:none} }
+
+/* === SECTION CARDS === */
+.sc {
+  background: linear-gradient(145deg, var(--cd), var(--cd2));
+  border: 1px solid var(--bd); border-radius:16px;
+  padding:24px; margin-bottom:18px;
+  position:relative; overflow:hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,.2);
+}
+.sc::before {
+  content:''; position:absolute; top:0; left:0; width:100%; height:3px;
+  background: linear-gradient(90deg, var(--p), var(--s), var(--a));
+}
+.sc.hl { border-color: rgba(255,107,53,.4); box-shadow: 0 0 30px rgba(255,107,53,.1) }
+.sc.gn { border-color: rgba(0,255,136,.3); box-shadow: 0 0 30px rgba(0,255,136,.08) }
+.sc.gn::before { background: linear-gradient(90deg, var(--g), var(--a), var(--g)) }
+.sc.vt { border-color: rgba(180,77,255,.3); box-shadow: 0 0 30px rgba(180,77,255,.08) }
+.sc.vt::before { background: linear-gradient(90deg, var(--violet), var(--r), var(--violet)) }
+
+/* Section Title */
+.st {
+  font-family: 'Orbitron', monospace; font-size: .85rem;
+  color: var(--p); letter-spacing: 2px; text-align:center;
+  font-weight: 700; text-transform: uppercase; margin-bottom:16px;
+  text-shadow: 0 0 20px var(--glow-p);
+}
+.st.cyan { color:var(--a); text-shadow:0 0 20px var(--glow-a) }
+.st.green { color:var(--g); text-shadow:0 0 20px var(--glow-g) }
+.st.gold { color:var(--s); text-shadow:0 0 20px var(--glow-s) }
+
+/* === INPUT CONTROLS === */
+.ir { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:20px }
+.ig { display:flex; flex-direction:column; align-items:center; gap:8px }
+.ig label {
+  font-family:'JetBrains Mono',monospace; font-size:.72rem; font-weight:600;
+  color:var(--a); letter-spacing:1.5px; text-transform:uppercase;
+}
+.ig input, .ig select {
+  padding:14px 18px; font-family:'Orbitron',monospace; font-size:1.1rem; font-weight:700;
+  text-align:center; background:var(--inp);
+  border:2px solid rgba(0,212,255,.4); border-radius:12px;
+  color:var(--a); outline:none; transition:all .3s; min-width:180px;
+}
+.ig input:focus, .ig select:focus {
+  border-color:var(--s); box-shadow:0 0 30px var(--glow-a); color:var(--s);
+}
+.ig select option { background:var(--cd); color:var(--tx) }
+
+/* === GRIDS === */
+.gr { display:grid; gap:14px; margin:14px 0 }
+.g2 { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)) }
+.g3 { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) }
+.g4 { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) }
+
+/* === MATERIAL CARDS === */
+.mc {
+  background: linear-gradient(145deg, var(--cd), #0a0a16);
+  border: 2px solid var(--bd); border-radius:14px;
+  padding:20px 16px; text-align:center;
+  transition: all .35s cubic-bezier(.22,1,.36,1);
+  position:relative; overflow:hidden;
+}
+.mc::before { content:''; position:absolute; top:0; left:0; width:100%; height:3px }
+.mc:hover { transform:translateY(-4px) }
+.mc .ic { font-size:2.2rem; margin-bottom:8px; filter:drop-shadow(0 0 8px rgba(255,255,255,.2)) }
+.mc .nm {
+  font-family:'JetBrains Mono',monospace; font-size:.68rem;
+  color:var(--dm); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;
+}
+.mc .vl { font-family:'Orbitron',monospace; font-size:1.8rem; font-weight:900; transition:all .3s }
+.mc .un { font-size:.68rem; color:var(--dm); margin-top:3px }
+
+/* Card Colors */
+.mc.cu { border-color:var(--cu) }.mc.cu::before { background:linear-gradient(90deg,var(--cu),#d4956a) }.mc.cu .vl { color:var(--cu) }
+.mc.cu:hover { box-shadow:0 8px 30px rgba(184,115,51,.25) }
+.mc.lead { border-color:var(--pb) }.mc.lead::before { background:linear-gradient(90deg,var(--pb),#8a9bac) }.mc.lead .vl { color:var(--pb) }
+.mc.lead:hover { box-shadow:0 8px 30px rgba(107,123,140,.25) }
+.mc.gp { border-color:var(--gunp) }.mc.gp::before { background:linear-gradient(90deg,#555,var(--gunp)) }.mc.gp .vl { color:var(--gunp) }
+.mc.gp:hover { box-shadow:0 8px 30px rgba(122,122,122,.2) }
+.mc.gn { border-color:var(--g) }.mc.gn::before { background:var(--g) }.mc.gn .vl { color:var(--g) }
+.mc.gn:hover { box-shadow:0 8px 30px var(--glow-g) }
+.mc.gl { border-color:var(--s) }.mc.gl::before { background:var(--s) }.mc.gl .vl { color:var(--s) }
+.mc.gl:hover { box-shadow:0 8px 30px var(--glow-s) }
+.mc.rd { border-color:var(--r) }.mc.rd::before { background:var(--r) }.mc.rd .vl { color:var(--r) }
+.mc.rd:hover { box-shadow:0 8px 30px rgba(255,51,102,.25) }
+.mc.bl { border-color:var(--a) }.mc.bl::before { background:var(--a) }.mc.bl .vl { color:var(--a) }
+.mc.bl:hover { box-shadow:0 8px 30px var(--glow-a) }
+.mc.vt { border-color:var(--violet) }.mc.vt::before { background:var(--violet) }.mc.vt .vl { color:var(--violet) }
+.mc.vt:hover { box-shadow:0 8px 30px rgba(180,77,255,.25) }
+
+/* === SUMMARY BOX === */
+.sm {
+  background: linear-gradient(135deg, #13132a, #0d0d1a);
+  border: 2px solid var(--p); border-radius:16px;
+  padding:24px; margin-top:18px; position:relative; overflow:hidden;
+  box-shadow: 0 0 30px rgba(255,107,53,.08);
+}
+.sm::before {
+  content:''; position:absolute; top:0; left:0; width:100%; height:4px;
+  background: linear-gradient(90deg, var(--p), var(--s), var(--a), var(--g));
+}
+.sm-t {
+  font-family:'Orbitron',monospace; font-size:.9rem;
+  color:var(--p); letter-spacing:2px; text-align:center;
+  text-transform:uppercase; font-weight:700; margin-bottom:16px;
+}
+.sg { display:grid; grid-template-columns:repeat(auto-fit, minmax(145px,1fr)); gap:12px }
+.si {
+  text-align:center; padding:16px 12px;
+  background: rgba(255,107,53,.06); border-radius:12px;
+  border: 1px solid rgba(255,107,53,.15); transition:all .3s;
+}
+.si:hover { background:rgba(255,107,53,.1); border-color:rgba(255,107,53,.35); transform:translateY(-2px) }
+.si .lb {
+  font-family:'JetBrains Mono',monospace; font-size:.62rem;
+  color:var(--dm); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:5px;
+}
+.si .sv { font-family:'Orbitron',monospace; font-size:1.15rem; font-weight:900; color:var(--p) }
+.si .sv.gl { color:var(--s) } .si .sv.gn { color:var(--g) }
+
+/* === RECIPE / INFO === */
+.rc {
+  margin-top:14px; padding:14px;
+  background: rgba(255,255,255,.02); border-radius:10px;
+  border: 1px dashed rgba(255,215,0,.2);
+  text-align:center; color:var(--dm); font-size:.85rem; line-height:1.7;
+}
+.rc b { color:var(--s); font-weight:700 }
+
+/* === BULLET BUTTONS === */
+.bs { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin:12px 0 }
+.bt {
+  padding:14px 20px; font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700;
+  border:2px solid var(--bd); border-radius:12px;
+  background:var(--inp); color:var(--dm);
+  cursor:pointer; transition:all .3s;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  position:relative; overflow:hidden;
+}
+.bt::after {
+  content:''; position:absolute; bottom:0; left:0; width:100%; height:2px;
+  background:var(--s); transform:scaleX(0); transition:.3s;
+}
+.bt:hover { border-color:var(--p); color:var(--tx); transform:translateY(-3px) }
+.bt:hover::after { transform:scaleX(.5) }
+.bt.on {
+  border-color:var(--s); color:var(--s);
+  background: linear-gradient(135deg, rgba(255,215,0,.15), rgba(255,107,53,.06));
+  box-shadow: 0 0 20px rgba(255,215,0,.2);
+}
+.bt.on::after { transform:scaleX(.8) }
+.bt small { font-family:'JetBrains Mono',monospace; font-size:.65rem; opacity:.6 }
+
+/* === INFO BOX === */
+.ib {
+  padding:11px 16px; background:rgba(0,212,255,.05);
+  border:1px solid rgba(0,212,255,.15); border-radius:10px;
+  text-align:center; color:var(--a);
+  font-family:'JetBrains Mono',monospace; font-size:.78rem; margin:10px 0;
+}
+
+/* === TABLES === */
+table { width:100%; border-collapse:collapse; margin:12px 0 }
+th, td { padding:11px 10px; text-align:left; border-bottom:1px solid rgba(255,255,255,.05); font-size:.82rem }
+th {
+  font-family:'JetBrains Mono',monospace; color:var(--a); font-weight:600;
+  text-transform:uppercase; letter-spacing:1.5px; font-size:.68rem;
+  background: rgba(0,212,255,.04); border-bottom:2px solid rgba(0,212,255,.15);
+}
+td { color:var(--tx) }
+tr:hover td { background:rgba(255,107,53,.03) }
+td b { color:var(--s) }
+
+/* === CATEGORY BADGES === */
+.cat-badge {
+  display:inline-block; padding:3px 10px; border-radius:6px;
+  font-family:'JetBrains Mono',monospace; font-size:.65rem;
+  font-weight:600; letter-spacing:1px; text-transform:uppercase;
+}
+.cat-badge.pistol { background:rgba(0,212,255,.1); color:var(--a); border:1px solid rgba(0,212,255,.3) }
+.cat-badge.smg { background:rgba(0,255,136,.1); color:var(--g); border:1px solid rgba(0,255,136,.3) }
+.cat-badge.rifle { background:rgba(255,107,53,.1); color:var(--p); border:1px solid rgba(255,107,53,.3) }
+.cat-badge.shotgun { background:rgba(255,51,102,.1); color:var(--r); border:1px solid rgba(255,51,102,.3) }
+.cat-badge.heavy { background:rgba(255,215,0,.1); color:var(--s); border:1px solid rgba(255,215,0,.3) }
+.cat-badge.mg { background:rgba(180,77,255,.1); color:var(--violet); border:1px solid rgba(180,77,255,.3) }
+.cat-badge.special { background:rgba(255,255,255,.05); color:var(--tx); border:1px solid rgba(255,255,255,.15) }
+
+/* === CATEGORY GROUPS === */
+.cat-groups { display:flex; gap:10px; justify-content:center; margin-bottom:8px }
+.cat-group-btn {
+  flex:1; max-width:300px; padding:16px 24px; text-align:center;
+  font-family:'Orbitron',monospace; font-size:.9rem; font-weight:800;
+  letter-spacing:2px; text-transform:uppercase;
+  border:2px solid var(--bd); border-radius:14px;
+  background: linear-gradient(145deg, var(--cd), var(--cd2));
+  color: var(--dm); cursor:pointer; transition:all .4s;
+  position:relative; overflow:hidden;
+}
+.cat-group-btn::before {
+  content:''; position:absolute; top:0; left:0; width:100%; height:3px;
+  background: linear-gradient(90deg, transparent, var(--bd), transparent);
+  transition:all .4s;
+}
+.cat-group-btn:hover { transform:translateY(-3px); border-color:rgba(255,255,255,.2) }
+.cat-group-btn.mafie.on {
+  border-color: var(--r); color: var(--r);
+  background: linear-gradient(145deg, rgba(255,51,102,.12), rgba(180,77,255,.06));
+  box-shadow: 0 0 30px rgba(255,51,102,.15), inset 0 0 30px rgba(255,51,102,.04);
+}
+.cat-group-btn.mafie.on::before { background: linear-gradient(90deg, var(--r), var(--violet), var(--r)) }
+.cat-group-btn.legal.on {
+  border-color: var(--g); color: var(--g);
+  background: linear-gradient(145deg, rgba(0,255,136,.1), rgba(0,212,255,.05));
+  box-shadow: 0 0 30px rgba(0,255,136,.12), inset 0 0 30px rgba(0,255,136,.03);
+}
+.cat-group-btn.legal.on::before { background: linear-gradient(90deg, var(--g), var(--a), var(--g)) }
+.cat-group-btn .cg-icon { font-size:1.4rem; display:block; margin-bottom:4px }
+.cat-group-btn .cg-sub {
+  font-family:'JetBrains Mono',monospace; font-size:.55rem;
+  color: var(--dm); letter-spacing:1px; margin-top:4px; font-weight:400;
+}
+
+.cat-panel { display:none; animation:panelIn .5s cubic-bezier(.22,1,.36,1) }
+.cat-panel.on { display:block }
+
+.sub-tabs {
+  display:flex; gap:6px; flex-wrap:wrap; justify-content:center;
+  margin-bottom:22px; padding:12px 10px;
+  background: linear-gradient(180deg, rgba(16,16,28,.8), rgba(6,6,16,.6));
+  border: 1px solid var(--bd); border-radius:14px;
+}
+.sub-tabs.mafie { border-color:rgba(255,51,102,.15); box-shadow:0 2px 15px rgba(255,51,102,.05) }
+.sub-tabs.legal { border-color:rgba(0,255,136,.15); box-shadow:0 2px 15px rgba(0,255,136,.05) }
+
+/* === FOOTER === */
+.ft {
+  text-align:center; padding:28px 20px; color:var(--dm); font-size:.78rem;
+  border-top:1px solid var(--bd); margin-top:28px; position:relative;
+}
+.ft::before {
+  content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:40%; height:1px;
+  background:linear-gradient(90deg, transparent, var(--p), transparent);
+}
+.ft b { color:var(--p) } .ft a { color:var(--a); text-decoration:none }
+.ft .copy { font-family:'JetBrains Mono',monospace; font-size:.6rem; color:#333; margin-top:12px; letter-spacing:2px }
+
+/* === ANIMATIONS === */
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.7} }
+.up { animation: pulse .3s ease }
+
+/* === RESPONSIVE === */
+@media (max-width:680px) {
+  .ct { padding:20px 12px }
+  .tb { padding:9px 14px; font-size:.8rem }
+  .mc .vl { font-size:1.4rem }
+  .ig input, .ig select { min-width:140px; font-size:.95rem }
+  .bt { padding:11px 15px; font-size:.9rem }
+  .br { gap:10px; padding:10px 14px }
+  .hd .logo { letter-spacing:3px }
+}
+</style>
+</head>
+<body>
+
+<!-- PARTICLE CANVAS -->
+<canvas id="particles"></canvas>
+
+<div class="ct">
+
+<!-- ═══ HEADER ═══ -->
+<header class="hd">
+  <div class="logo">CRAFT ROLEPLAY</div>
+  <div class="sub">Calculator Profesional — B-Zone V</div>
+  <div class="version">v3.0 — 2026 EDITION</div>
+</header>
+
+<!-- ═══ BRAND BAR ═══ -->
+<div class="br">
+  <span class="tag">🎮 COD 5% ROBERTO</span>
+  <span class="sep">•</span>
+  <a href="http://v.b-zone.ro" target="_blank">v.b-zone.ro</a>
+  <span class="sep">•</span>
+  <span class="ref">REF 6218</span>
+  <span class="sep">•</span>
+  <span class="srv">🌐 Server B-ZONE</span>
+</div>
+
+<!-- ═══ CATEGORY GROUPS ═══ -->
+<div class="cat-groups">
+  <div class="cat-group-btn mafie on" onclick="showGroup('mafie')">
+    <span class="cg-icon">🔫</span>CRAFT MAFIE
+    <div class="cg-sub">Cocaina • Gloante • Arme • Componente</div>
+  </div>
+  <div class="cat-group-btn legal" onclick="showGroup('legal')">
+    <span class="cg-icon">🔨</span>CRAFT LEGAL
+    <div class="cg-sub">Masa Craft • Locatii</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     GRUP: CRAFT MAFIE
+     PENTRU A ADAUGA UN SUB-TAB NOU:
+     1. Adauga o intrare in MAFIE_TABS din JS
+     2. Adauga un <div class="pn" id="p_NUMEID"> cu continutul
+     ═══════════════════════════════════════ -->
+<div class="cat-panel on" id="g_mafie">
+  <div class="sub-tabs mafie" id="mafie_tabs"></div>
+
+  <!-- SUB-TAB: COCAINA -->
+  <div class="pn on" id="p_cocaina">
+    <div class="sc gn">
+      <div class="st green">💎 Calculator Procesare Cocaina</div>
+      <div class="ir">
+        <div class="ig">
+          <label>🌿 Numar frunze de coca</label>
+          <input type="number" id="cI" placeholder="560" min="0" value="560" oninput="cC()">
+        </div>
+      </div>
+      <div class="ib">✨ Introdu numarul de frunze pentru a calcula intregul proces de la materie prima la produs final</div>
+    </div>
+    <div class="gr g3" id="cCards"></div>
+    <div class="sm">
+      <div class="sm-t">📊 Sumar Final</div>
+      <div class="sg">
+        <div class="si"><div class="lb">Total KG Procesate</div><div class="sv" id="cK">0.00</div></div>
+        <div class="si"><div class="lb">Total Plicuri</div><div class="sv gl" id="cP">0</div></div>
+        <div class="si"><div class="lb">Profit Estimat</div><div class="sv gn" id="cF">$0</div></div>
+      </div>
+      <div class="rc">📋 Flux: <b>🌿 Frunze → 🧪 Sticle → 🍳 Tavi → 🧱 Brichete → 👜 Pungi → 📦 Plicuri</b></div>
+    </div>
+  </div>
+
+  <!-- SUB-TAB: GLOANTE -->
+  <div class="pn" id="p_gloante">
+    <div class="sc hl">
+      <div class="st">🎯 Selecteaza Calibrul</div>
+      <div class="bs" id="bBtns"></div>
+    </div>
+    <div class="sc">
+      <div class="ir">
+        <div class="ig">
+          <label>🔢 Cate gloante vrei?</label>
+          <input type="number" id="bI" placeholder="100" min="0" value="100" oninput="cB()">
+        </div>
+        <div class="mc bl"><div class="nm">Carcase Necesare</div><div class="vl" id="bC">0</div></div>
+        <div class="mc gn"><div class="nm">Gloante Produse</div><div class="vl" id="bP">0</div></div>
+      </div>
+    </div>
+    <div class="st cyan">📦 Materiale Necesare</div>
+    <div class="gr g3">
+      <div class="mc cu"><div class="ic">🥉</div><div class="nm">Cupru</div><div class="vl" id="bCu">0</div><div class="un">bucati</div></div>
+      <div class="mc lead"><div class="ic">⚙️</div><div class="nm">Plumb</div><div class="vl" id="bPb">0</div><div class="un">bucati</div></div>
+      <div class="mc gp"><div class="ic">💥</div><div class="nm">Praf de Pusca</div><div class="vl" id="bPr">0</div><div class="un">bucati</div></div>
+    </div>
+    <div class="sm">
+      <div class="sm-t">📊 Sumar Productie</div>
+      <div class="sg">
+        <div class="si"><div class="lb">Tip Selectat</div><div class="sv gl" id="bT">9mm</div></div>
+        <div class="si"><div class="lb">Gloante Cerute</div><div class="sv" id="bQ">0</div></div>
+        <div class="si"><div class="lb">Gloante Produse</div><div class="sv gn" id="bTP">0</div></div>
+        <div class="si"><div class="lb">Total Materiale</div><div class="sv" id="bTM">0</div></div>
+      </div>
+      <div class="rc">📋 Reteta: <b id="bR"></b></div>
+    </div>
+  </div>
+
+  <!-- SUB-TAB: ARME -->
+  <div class="pn" id="p_arme">
+    <div class="sc hl">
+      <div class="st">🔫 Calculator Craft Arme</div>
+      <div class="ir">
+        <div class="ig"><label>Selecteaza Arma</label><select id="aS" onchange="cA()"></select></div>
+        <div class="ig"><label>Cantitate</label><input type="number" id="aQ" value="1" min="1" max="100" oninput="cA()"></div>
+      </div>
+    </div>
+    <div id="aR"></div>
+  </div>
+
+  <!-- SUB-TAB: COMPONENTE -->
+  <div class="pn" id="p_comp">
+    <div class="sc hl"><div class="st">⚙️ Componente & Materiale Arme</div></div>
+    <div id="cT"></div>
+  </div>
+
+</div><!-- /g_mafie -->
+
+
+<!-- ═══════════════════════════════════════
+     GRUP: CRAFT LEGAL
+     PENTRU A ADAUGA UN SUB-TAB NOU:
+     1. Adauga o intrare in LEGAL_TABS din JS
+     2. Adauga un <div class="pn" id="p_NUMEID"> cu continutul
+     ═══════════════════════════════════════ -->
+<div class="cat-panel" id="g_legal">
+  <div class="sub-tabs legal" id="legal_tabs"></div>
+
+  <!-- SUB-TAB: MASA CRAFT -->
+  <div class="pn" id="p_masa">
+    <div class="sc hl"><div class="st gold">🔨 Retete Masa de Craft</div></div>
+    <div id="mT"></div>
+  </div>
+
+  <!-- SUB-TAB: LOCATII -->
+  <div class="pn" id="p_loc">
+    <div class="sc hl"><div class="st cyan">📍 Locatii Materiale</div></div>
+    <div id="lT"></div>
+  </div>
+
+</div><!-- /g_legal -->
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="ft">
+  <p>Calculator pentru server <b>B-ZONE V</b> — GTA 5 RolePlay</p>
+  <p style="margin-top:8px">🎮 <b>COD 5% ROBERTO</b> | <a href="http://v.b-zone.ro">v.b-zone.ro</a> | <b>REF 6218</b></p>
+  <p class="copy">CRAFT ROLEPLAY 2026 — TOATE DREPTURILE REZERVATE</p>
+</footer>
+
+</div><!-- /.ct -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   ███  DATE  ███
+   Pentru a MODIFICA sau ADAUGA date, editeaza sectiunile de mai
+   jos. Fiecare categorie este clar separata si comentata.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── CATEGORIA: MUNITIE (Gloante) ───
+   Cheie = numele calibrului
+   gpc = gloante per carcasa
+   cu/pb/pr = cupru/plumb/praf per carcasa
+   ret = reteta text
+   cat = categoria armelor care folosesc acest calibru
+   PENTRU A ADAUGA UN TIP NOU: copiaza un rand si modifica valorile
+*/
+const MUNITIE = {
+  "9mm":        { gpc:30, cu:1, pb:1, pr:1, ret:"1 Cupru + 1 Plumb + 1 Praf de Pusca = 30 gloante", cat:"Pistol / SMG" },
+  "7.62mm":     { gpc:30, cu:2, pb:2, pr:2, ret:"2 Cupru + 2 Plumb + 2 Praf de Pusca = 30 gloante", cat:"Rifle / MG" },
+  "7.65mm":     { gpc:20, cu:2, pb:2, pr:2, ret:"2 Cupru + 2 Plumb + 2 Praf de Pusca = 20 gloante", cat:"Special (Navy)" },
+  ".38 Magnum":  { gpc:20, cu:2, pb:2, pr:3, ret:"2 Cupru + 2 Plumb + 3 Praf de Pusca = 20 gloante", cat:"Revolver / Shotgun" },
+};
+
+/* ─── CATEGORIA: ARME ───
+   mun = tipul de munitie (trebuie sa existe in MUNITIE)
+   piese = { "NumePiesa": cantitate }
+   cat = categoria armei (Pistol, SMG, Rifle, Shotgun, Heavy, MG, Special)
+   PENTRU A ADAUGA O ARMA NOUA: copiaza un bloc si modifica
+*/
+const ARME = {
+  "Combat Pistol": { mun:"9mm", piese:{"Piese Arme":1,"Teava Pistol":1,"Corp Pistol":1}, cat:"Pistol" },
+  "Machine Pistol": { mun:"9mm", piese:{"Piese Arme":1,"Teava Pistol":1,"Corp Pistol":1,"Teava SMG":1}, cat:"Pistol" },
+  "Micro SMG":     { mun:"9mm", piese:{"Piese Arme":1,"Teava SMG":1,"Corp SMG":1,"Teava Rifle":1,"Butstock":1}, cat:"SMG" },
+  "SMG MK2":       { mun:"9mm", piese:{"Piese Arme":1,"Teava SMG":1,"Corp SMG":1,"Teava Rifle":1,"Butstock":1}, cat:"SMG" },
+  "(DB)":          { mun:".38 Magnum", piese:{"Piese Arme":1,"Teava Pistol":1,"Corp Pistol":1,"Teava Rifle":1,"Corp Rifle":1,"Butstock":1,"Blueprint":1,"Lingou Aur":1}, cat:"Shotgun" },
+  "(AK)":          { mun:"7.62mm", piese:{"Piese Arme":3,"Teava Rifle":1,"Corp Rifle":1,"Butstock":1,"Teava SMG":1,"Corp SMG":1,"Teava Pistol":1,"Corp Pistol":1,"Blueprint":1}, cat:"Rifle" },
+  "MG (skill5)":   { mun:"7.62mm", piese:{"Piese Arme":3,"Teava Rifle":1,"Corp Rifle":1,"Butstock":1,"Teava SMG":1,"Corp SMG":1,"Teava Pistol":1,"Corp Pistol":1,"Blueprint":1}, cat:"Rifle" },
+  "Heavy":         { mun:".38 Magnum", piese:{"Piese Arme":4,"Corp Pistol":1,"Teava Rifle":1,"Corp Rifle":1,"Butstock":1,"Blueprint":1}, cat:"Heavy" },
+  "Combat MG":     { mun:"7.62mm", piese:{"Piese Arme":4,"Teava Rifle":1,"Corp Rifle":1,"Butstock":1,"Teava SMG":1,"Corp SMG":1,"Teava Pistol":1,"Corp Pistol":1,"Blueprint":1}, cat:"MG" },
+  "Famas":         { mun:"7.62mm", piese:{"Piese Arme":4,"Corp Pistol":1,"Teava SMG":1,"Corp SMG":1,"Teava Rifle":1,"Corp Rifle":1,"Butstock":1,"Blueprint":1}, cat:"Rifle" },
+  "Navy":          { mun:"7.65mm", piese:{"Piese Arme":6,"Corp Pistol":1,"Teava Rifle":1,"Corp Rifle":1,"Butstock":1,"Blueprint":1}, cat:"Special" },
+};
+
+/* ─── CATEGORIA: COMPONENTE ───
+   mat = { "NumeMaterial": "CantitateX Descriere" }
+   desc = descrierea componentei
+   PENTRU A ADAUGA: copiaza un bloc
+*/
+const COMP = {
+  "Piese de Arme":  { mat:{"Arc":"1x Arc","Otel":"1x Otel","Plastic":"1x Plastic","Scrap":"2x Scrap"}, desc:"Componenta de baza pentru orice arma" },
+  "Arc":            { mat:{"Fier":"1x Fier","Carbune":"1x Carbune"}, desc:"Arc metalic pentru mecanisme" },
+  "Plumb":          { mat:{"Aluminiu":"1x Aluminiu","Plumb Brut":"4x Plumb"}, desc:"Plumb pentru munitie" },
+  "Aluminiu":       { mat:{"Aluminiu Brut":"4x Aluminiu"}, desc:"Aluminiu prelucrat" },
+  "Praf de Pusca":  { mat:{"Sulf":"1x Sulf","Carbune":"1x Carbune"}, desc:"Praf de pusca pentru munitie" },
+};
+
+/* ─── CATEGORIA: MATERIALE ARME ───
+   pa = piese de arme necesare
+   cat = categoria piesei
+*/
+const MATARME = {
+  "Teava Pistol":   { pa:1, cat:"Pistol" },
+  "Corp Pistol":    { pa:1, cat:"Pistol" },
+  "Teava SMG":      { pa:2, cat:"SMG" },
+  "Corp SMG":       { pa:2, cat:"SMG" },
+  "Corp de Rifle":  { pa:3, cat:"Rifle" },
+  "Teava de Rifle": { pa:3, cat:"Rifle" },
+  "Butstock":       { pa:2, cat:"General" },
+};
+
+/* ─── CATEGORIA: MASA DE CRAFT ───
+   mat = lista de retete pe nivele
+   cat = categoria obiectului
+*/
+const MASA = {
+  "Tarnacop":   { mat:["5x Cupru","5x Fier","5x Otel","2x Aur + 3x Otel","1x Diamant + 2x Aur"], cat:"Unelte" },
+  "Topor":      { mat:["5x Cupru","5x Fier","5x Otel","2x Aur + 3x Otel","1x Diamant + 2x Aur"], cat:"Unelte" },
+  "Undita":     { mat:["5x Plastic","3x Cupru","3x Aluminiu","3x Fier"], cat:"Unelte" },
+  "Teava":      { mat:["10x Scrap (Cautator Comori)","2x Fier"], cat:"Materiale" },
+  "Aprinzator": { mat:["15x Scrap (Cautator Comori)","1x Teava","1x Butelie"], cat:"Unelte" },
+  "Tableta":    { mat:["5x Scrap (Cautator Comori)","3x Cip Nou","3x Cip Vechi","3x Cip Normal","1x Tableta"], cat:"Electronice" },
+  "Cleste":     { mat:["20x Scrap (Cautator Comori)","2x Fier","4x Aluminiu","5x Plastic"], cat:"Unelte" },
+};
+
+/* ─── CATEGORIA: LOCATII MATERIALE ───
+   Cheie = numele locatiei
+   Valoare = lista de materiale gasibile acolo
+   emoji = emoji-ul locatiei
+   NOTA: "Scrap (Cautator Comori)" = jobul Cautator de Comori
+*/
+const LOC = {
+  "Mina de Fier":         { mat:["Fier","Carbune","Aur"], emoji:"⛰️", desc:"Job: Miner" },
+  "Mina de Sulf":         { mat:["Sulf","Plumb"], emoji:"🌋", desc:"Job: Miner" },
+  "Mina de Cupru":        { mat:["Cupru","Aluminiu","Carbune"], emoji:"🏔️", desc:"Job: Miner" },
+  "Scrap Yard":           { mat:["Scrap (Cautator Comori)"], emoji:"🏭", desc:"Job: Cautator de Comori" },
+  "Gunoier":              { mat:["Plastic"], emoji:"🗑️", desc:"Job: Gunoier" },
+};
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  HELPERS  ███
+   ═══════════════════════════════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+const F = n => Math.floor(n).toLocaleString('ro-RO');
+function A(id, v) {
+  const e = $(id); if (!e) return;
+  e.textContent = v; e.classList.remove('up');
+  void e.offsetWidth; e.classList.add('up');
+}
+function catBadge(cat) {
+  const c = cat.toLowerCase().replace(/\s.*/,'');
+  const map = {pistol:'pistol',smg:'smg',rifle:'rifle',shotgun:'shotgun',heavy:'heavy',mg:'mg',special:'special'};
+  return `<span class="cat-badge ${map[c]||'special'}">${cat}</span>`;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  NAVIGARE PE CATEGORII  ███
+   ═══════════════════════════════════════════════════════════════
+   PENTRU A ADAUGA UN SUB-TAB NOU IN CRAFT MAFIE:
+     1. Adauga o linie noua in MAFIE_TABS (ex: ['heroina', '💊 Heroina'])
+     2. Adauga in HTML un <div class="pn" id="p_heroina"> in g_mafie
+     3. Gata! Tab-ul apare automat.
+
+   PENTRU A ADAUGA UN SUB-TAB NOU IN CRAFT LEGAL:
+     1. Adauga o linie noua in LEGAL_TABS
+     2. Adauga un <div class="pn" id="p_numeid"> in g_legal
+     3. Gata!
+   ═══════════════════════════════════════════════════════════════ */
+
+const MAFIE_TABS = [
+  ['cocaina',  '💎 Cocaina'],
+  ['gloante',  '🎯 Gloante'],
+  ['arme',     '🔫 Arme'],
+  ['comp',     '⚙️ Componente'],
+  /* ADAUGA AICI: ['heroina', '💊 Heroina'], */
+];
+
+const LEGAL_TABS = [
+  ['masa', '🔨 Masa Craft'],
+  ['loc',  '📍 Locatii'],
+  /* ADAUGA AICI: ['pescuit', '🎣 Pescuit'], */
+];
+
+let currentGroup = 'mafie';
+
+function showGroup(group) {
+  currentGroup = group;
+  document.querySelectorAll('.cat-group-btn').forEach(b => b.classList.remove('on'));
+  document.querySelector(`.cat-group-btn.${group}`).classList.add('on');
+  document.querySelectorAll('.cat-panel').forEach(p => p.classList.remove('on'));
+  $('g_' + group).classList.add('on');
+  // Activate first sub-tab of the group
+  const tabs = group === 'mafie' ? MAFIE_TABS : LEGAL_TABS;
+  if (tabs.length > 0) switchSubTab(group, tabs[0][0]);
+}
+
+function buildSubTabs(containerId, tabs, group) {
+  const c = $(containerId);
+  tabs.forEach(([k, l], i) => {
+    const b = document.createElement('div');
+    b.className = 'tb' + (i === 0 ? ' on' : '');
+    b.textContent = l;
+    b.dataset.tab = k;
+    b.dataset.group = group;
+    b.onclick = () => switchSubTab(group, k);
+    c.appendChild(b);
+  });
+}
+
+function switchSubTab(group, tabId) {
+  const container = $('g_' + group);
+  // Update sub-tab buttons
+  container.querySelectorAll('.sub-tabs .tb').forEach(b => {
+    b.classList.toggle('on', b.dataset.tab === tabId);
+  });
+  // Show/hide panels inside group
+  container.querySelectorAll('.pn').forEach(p => p.classList.remove('on'));
+  const panel = $('p_' + tabId);
+  if (panel) panel.classList.add('on');
+}
+
+function initNavigation() {
+  buildSubTabs('mafie_tabs', MAFIE_TABS, 'mafie');
+  buildSubTabs('legal_tabs', LEGAL_TABS, 'legal');
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  GLOANTE  ███
+   ═══════════════════════════════════════════════════════════════ */
+let curB = '9mm';
+function initB() {
+  const c = $('bBtns');
+  Object.entries(MUNITIE).forEach(([k, v]) => {
+    const b = document.createElement('div');
+    b.className = 'bt' + (k === curB ? ' on' : '');
+    b.innerHTML = `<span>${k}</span><small>${v.gpc} gl/carcasa</small>`;
+    b.onclick = () => {
+      curB = k;
+      document.querySelectorAll('#bBtns .bt').forEach(x => x.classList.remove('on'));
+      b.classList.add('on'); cB();
+    };
+    c.appendChild(b);
+  });
+}
+function cB() {
+  const w = parseInt($('bI').value) || 0, cfg = MUNITIE[curB]; if (!cfg) return;
+  const ca = Math.ceil(w / cfg.gpc), pr = ca * cfg.gpc;
+  const cu = ca * cfg.cu, pb = ca * cfg.pb, pf = ca * cfg.pr;
+  A('bC', F(ca)); A('bP', F(pr));
+  A('bCu', F(cu)); A('bPb', F(pb)); A('bPr', F(pf));
+  A('bT', curB); A('bQ', F(w)); A('bTP', F(pr)); A('bTM', F(cu + pb + pf));
+  $('bR').textContent = cfg.ret;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  COCAINA  ███
+   ═══════════════════════════════════════════════════════════════ */
+const COCA_STEPS = [
+  ['Frunze de Coca',      '🌿', 'gn'],
+  ['Sticle (Extractie)',  '🧪', 'bl'],
+  ['Tavi (Uscare)',       '🍳', 'gl'],
+  ['Brichete (Presare)',  '🧱', 'rd'],
+  ['Pungi (Impartire)',   '👜', 'vt'],
+  ['Plicuri (Final)',     '📦', 'gn'],
+];
+function initC() {
+  const c = $('cCards');
+  COCA_STEPS.forEach((s, i) => {
+    c.innerHTML += `<div class="mc ${s[2]}"><div class="ic">${s[1]}</div><div class="nm">${s[0]}</div><div class="vl" id="cc${i}">0</div><div class="un" id="ck${i}">0.00 kg</div></div>`;
+  });
+}
+function cC() {
+  const f = parseInt($('cI').value) || 0;
+  const fk=.04*f, sn=.05*f, sk=.4*sn, tn=sn, tk=.3*tn;
+  const bn=tn, bk=.2*bn, pn=2*bn, pk=.03*pn, ln=pn, lk=.2*ln;
+  const vals = [[f,fk],[sn,sk],[tn,tk],[bn,bk],[pn,pk],[ln,lk]];
+  vals.forEach(([n,k], i) => { A('cc'+i, F(Math.floor(n))); $('ck'+i).textContent = k.toFixed(2)+' kg' });
+  A('cK', (fk+sk+tk+bk+pk).toFixed(2));
+  A('cP', F(Math.floor(ln)));
+  A('cF', '$' + F(Math.floor(ln * 13600)));
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  ARME  ███
+   ═══════════════════════════════════════════════════════════════ */
+function initA() {
+  const s = $('aS');
+  // Group by category
+  const cats = {};
+  Object.entries(ARME).forEach(([k, v]) => {
+    if (!cats[v.cat]) cats[v.cat] = [];
+    cats[v.cat].push(k);
+  });
+  Object.entries(cats).forEach(([cat, names]) => {
+    const g = document.createElement('optgroup');
+    g.label = cat;
+    names.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; g.appendChild(o) });
+    s.appendChild(g);
+  });
+}
+function cA() {
+  const n = $('aS').value, q = parseInt($('aQ').value) || 1, a = ARME[n]; if (!a) return;
+  let h = `<div class="sc"><div class="st">${n} × ${q}</div>
+  <div class="ib">Categorie: ${catBadge(a.cat)} &nbsp; Munitie: <b style="color:var(--s)">${a.mun}</b></div>
+  <table><tr><th>Piesa</th><th>Per Arma</th><th>Total (×${q})</th></tr>`;
+  let t = 0;
+  Object.entries(a.piese).forEach(([p, nr]) => {
+    h += `<tr><td>${p}</td><td>${nr}×</td><td><b>${nr*q}×</b></td></tr>`;
+    t += nr * q;
+  });
+  h += `<tr style="border-top:2px solid var(--p)"><td colspan="2"><b style="color:var(--a)">TOTAL PIESE</b></td><td><b style="color:var(--s);font-size:1.1rem">${t}×</b></td></tr></table></div>`;
+  const m = MUNITIE[a.mun];
+  if (m) h += `<div class="sc"><div class="st cyan">🎯 Munitie Recomandata: ${a.mun}</div>
+  <div class="rc"><b>${m.ret}</b></div>
+  <div class="ib">Foloseste tab-ul <b>🎯 Gloante</b> pentru calculator detaliat munitie</div></div>`;
+  $('aR').innerHTML = h;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  COMPONENTE  ███
+   ═══════════════════════════════════════════════════════════════ */
+function initComp() {
+  let h = `<div class="sc"><div class="st cyan">🔩 Componente Craft</div>
+  <table><tr><th>Componenta</th><th>Materiale Necesare</th><th>Descriere</th></tr>`;
+  Object.entries(COMP).forEach(([k, v]) => {
+    const mats = Object.values(v.mat).map(m => `<span style="color:var(--s)">${m}</span>`).join(', ');
+    h += `<tr><td><b>${k}</b></td><td>${mats}</td><td style="color:var(--dm)">${v.desc}</td></tr>`;
+  });
+  h += `</table></div>`;
+
+  h += `<div class="sc"><div class="st">🛠️ Materiale Arme → Piese de Arme</div>
+  <table><tr><th>Piesa</th><th>Piese Arme Necesare</th><th>Categorie</th></tr>`;
+  Object.entries(MATARME).forEach(([k, v]) => {
+    h += `<tr><td><b>${k}</b></td><td style="color:var(--s);font-weight:700">${v.pa}×</td><td>${catBadge(v.cat)}</td></tr>`;
+  });
+  h += `</table></div>`;
+  $('cT').innerHTML = h;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  MASA CRAFT  ███
+   ═══════════════════════════════════════════════════════════════ */
+function initM() {
+  // Group by category
+  const cats = {};
+  Object.entries(MASA).forEach(([k, v]) => {
+    if (!cats[v.cat]) cats[v.cat] = [];
+    cats[v.cat].push([k, v]);
+  });
+
+  let h = '';
+  Object.entries(cats).forEach(([cat, items]) => {
+    h += `<div class="sc"><div class="st gold">🔨 ${cat.toUpperCase()}</div>`;
+    items.forEach(([name, data]) => {
+      h += `<div style="margin:12px 0;padding:14px;background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.12);border-radius:10px">
+      <div style="font-weight:700;color:var(--s);margin-bottom:8px;font-size:1rem">${name}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">`;
+      data.mat.forEach((m, i) => {
+        h += `<div style="padding:6px 12px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:8px;font-size:.82rem">
+        <span style="color:var(--dm);font-size:.65rem">LVL ${i+1}</span><br>
+        <span style="color:var(--a);font-weight:600">${m}</span></div>`;
+      });
+      h += `</div></div>`;
+    });
+    h += `</div>`;
+  });
+  $('mT').innerHTML = h;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  LOCATII  ███
+   ═══════════════════════════════════════════════════════════════ */
+function initL() {
+  let h = '<div class="gr g2">';
+  Object.entries(LOC).forEach(([k, v]) => {
+    h += `<div class="mc bl" style="text-align:left;padding:20px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+      <span style="font-size:2rem">${v.emoji}</span>
+      <div>
+        <div style="font-family:'Orbitron',monospace;font-size:.8rem;color:var(--s);font-weight:700;letter-spacing:1px">${k}</div>
+        <div style="font-size:.7rem;color:var(--dm)">${v.desc}</div>
+      </div>
+    </div>`;
+    v.mat.forEach(m => {
+      h += `<div style="padding:6px 0;color:var(--tx);font-size:.88rem;border-bottom:1px solid rgba(255,255,255,.04)">
+      <span style="color:var(--a);margin-right:6px">▸</span>${m}</div>`;
+    });
+    h += '</div>';
+  });
+  h += '</div>';
+  $('lT').innerHTML = h;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  PARTICLES  ███
+   ═══════════════════════════════════════════════════════════════ */
+function initParticles() {
+  const c = $('particles'), ctx = c.getContext('2d');
+  let W, H, pts = [];
+  function resize() { W = c.width = innerWidth; H = c.height = innerHeight }
+  resize(); addEventListener('resize', resize);
+  for (let i = 0; i < 40; i++) {
+    pts.push({
+      x: Math.random()*W, y: Math.random()*H,
+      r: Math.random()*1.5+.5, dx: (Math.random()-.5)*.3, dy: (Math.random()-.5)*.3,
+      a: Math.random()*.3+.1
+    });
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    pts.forEach(p => {
+      p.x += p.dx; p.y += p.dy;
+      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+      if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,107,53,${p.a})`;
+      ctx.fill();
+    });
+    // Draw connections
+    for (let i = 0; i < pts.length; i++) {
+      for (let j = i+1; j < pts.length; j++) {
+        const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d < 120) {
+          ctx.beginPath();
+          ctx.moveTo(pts[i].x, pts[i].y);
+          ctx.lineTo(pts[j].x, pts[j].y);
+          ctx.strokeStyle = `rgba(255,107,53,${.06*(1-d/120)})`;
+          ctx.lineWidth = .5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  INIT  ███
+   ═══════════════════════════════════════════════════════════════ */
+initParticles();
+initNavigation();
+initB(); cB();
+initC(); cC();
+initA(); cA();
+initComp();
+initM();
+initL();
+</script>
+</body>
+</html>
