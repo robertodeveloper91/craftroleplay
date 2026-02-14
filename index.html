@@ -1309,7 +1309,112 @@ let LOC = APP_DATA.LOC;
 
 function loadCalculators() {
   const saved = localStorage.getItem('craft_calculators');
-  return saved ? JSON.parse(saved) : [];
+  if (saved) {
+    return JSON.parse(saved);
+  }
+  
+  // Calculator COCAINĂ pre-configurat ca exemplu
+  return [{
+    id: 'calculator_cocaina',
+    name: 'Procesare Cocaina',
+    icon: '💎',
+    tabId: 'cocaina',
+    inputLabel: 'Numar Frunze de Coca',
+    inputIcon: '🌿',
+    inputPlaceholder: '560',
+    steps: [
+      {
+        name: 'Frunze de Coca',
+        icon: '🌿',
+        color: 'gn',
+        numberLabel: 'Frunze',
+        weightLabel: 'kg'
+      },
+      {
+        name: 'Sticle (Extractie)',
+        icon: '🧪',
+        color: 'bl',
+        numberLabel: 'Sticle',
+        weightLabel: 'kg'
+      },
+      {
+        name: 'Tavi (Uscare)',
+        icon: '🍳',
+        color: 'gl',
+        numberLabel: 'Tavi',
+        weightLabel: 'kg'
+      },
+      {
+        name: 'Brichete (Presare)',
+        icon: '🧱',
+        color: 'rd',
+        numberLabel: 'Brichete',
+        weightLabel: 'kg'
+      },
+      {
+        name: 'Pungi (Impartire)',
+        icon: '👜',
+        color: 'vt',
+        numberLabel: 'Pungi',
+        weightLabel: 'kg'
+      },
+      {
+        name: 'Plicuri (Final)',
+        icon: '📦',
+        color: 'gn',
+        numberLabel: 'Plicuri',
+        weightLabel: 'kg'
+      }
+    ],
+    summary: [
+      {
+        label: 'Total KG Procesate',
+        icon: '⚖️',
+        id: 'total_kg'
+      },
+      {
+        label: 'Total Plicuri',
+        icon: '📦',
+        id: 'total_plicuri'
+      },
+      {
+        label: 'Profit Estimat',
+        icon: '💰',
+        id: 'profit'
+      }
+    ],
+    formula: `const f = inputs.cantitate;
+
+// Calculez fiecare etapa: [numar_bucati, kg]
+const fk = 0.04 * f;
+const sn = 0.05 * f;
+const sk = 0.4 * sn;
+const tn = sn;
+const tk = 0.3 * tn;
+const bn = tn;
+const bk = 0.2 * bn;
+const pn = 2 * bn;
+const pk = 0.03 * pn;
+const ln = pn;
+const lk = 0.2 * ln;
+
+const steps = [
+  [f, fk],
+  [sn, sk],
+  [tn, tk],
+  [bn, bk],
+  [pn, pk],
+  [ln, lk]
+];
+
+const summary = {
+  total_kg: (fk + sk + tk + bk + pk + lk).toFixed(2),
+  total_plicuri: Math.floor(ln),
+  profit: Math.floor(ln * 13600)
+};
+
+return { steps, summary };`
+  }];
 }
 
 function saveCalculators() {
