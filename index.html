@@ -1309,12 +1309,9 @@ let LOC = APP_DATA.LOC;
 
 function loadCalculators() {
   const saved = localStorage.getItem('craft_calculators');
-  if (saved) {
-    return JSON.parse(saved);
-  }
   
   // Calculator COCAINĂ pre-configurat ca exemplu
-  return [{
+  const defaultCalculator = {
     id: 'calculator_cocaina',
     name: 'Procesare Cocaina',
     icon: '💎',
@@ -1414,7 +1411,22 @@ const summary = {
 };
 
 return { steps, summary };`
-  }];
+  };
+  
+  if (saved) {
+    const parsedCalcs = JSON.parse(saved);
+    // Verifică dacă există deja calculatorul de cocaină
+    const hasCocaina = parsedCalcs.some(c => c.id === 'calculator_cocaina');
+    if (!hasCocaina) {
+      // Adaugă cocaina la început
+      parsedCalcs.unshift(defaultCalculator);
+      localStorage.setItem('craft_calculators', JSON.stringify(parsedCalcs));
+      return parsedCalcs;
+    }
+    return parsedCalcs;
+  }
+  
+  return [defaultCalculator];
 }
 
 function saveCalculators() {
@@ -2386,6 +2398,11 @@ function openSubcategoryModal(editCatId = null, editIndex = null) {
   
   const sub = editIndex !== null ? subcategories[editCatId][editIndex] : null;
   
+  // Generez lista de calculatoare disponibile
+  const calculatorOptions = calculators.map(calc => 
+    `<option value="${calc.id}" ${sub?.calculatorId === calc.id ? 'selected' : ''}>${calc.icon} ${calc.name}</option>`
+  ).join('');
+  
   $('modal-title').textContent = editIndex !== null ? 'Editeaza Subcategorie' : 'Adauga Subcategorie Noua';
   $('modal-content').innerHTML = `
     <div class="form-group">
@@ -2408,15 +2425,32 @@ function openSubcategoryModal(editCatId = null, editIndex = null) {
     </div>
     <div class="form-group">
       <label>Tip Afisare</label>
-      <select id="sub-type">
+      <select id="sub-type" onchange="toggleCalculatorDropdown(this.value)">
         <option value="calculator" ${sub?.type === 'calculator' ? 'selected' : ''}>Calculator (input numeric)</option>
         <option value="table" ${sub?.type === 'table' ? 'selected' : ''}>Tabel (lista date)</option>
         <option value="cards" ${sub?.type === 'cards' ? 'selected' : ''}>Carduri (grid)</option>
       </select>
     </div>
+    <div class="form-group" id="calculator-selector" style="display:${sub?.type === 'calculator' || !sub ? 'block' : 'none'}">
+      <label>⭐ Selecteaza Calculator Personalizat</label>
+      <select id="sub-calculator">
+        <option value="">-- Fara calculator personalizat (hardcoded) --</option>
+        ${calculatorOptions}
+      </select>
+      <div style="font-size:0.7rem;color:var(--dm);margin-top:6px;">
+        💡 Daca alegi un calculator, acesta va fi afisat automat in acest tab
+      </div>
+    </div>
   `;
   
   $('modal-overlay').classList.add('active');
+}
+
+function toggleCalculatorDropdown(type) {
+  const selector = $('calculator-selector');
+  if (selector) {
+    selector.style.display = type === 'calculator' ? 'block' : 'none';
+  }
 }
 
 function editSubcategory(catId, index) {
@@ -2438,6 +2472,7 @@ function saveSubcategory() {
   const name = $('sub-name').value.trim();
   const icon = $('sub-icon').value;
   const type = $('sub-type').value;
+  const calculatorId = $('sub-calculator')?.value || '';
   
   if (!id || !name) {
     alert('ID si Numele sunt obligatorii!');
@@ -2450,6 +2485,11 @@ function saveSubcategory() {
   }
   
   const newSub = { id, name, icon, type };
+  
+  // Adaug calculatorId doar daca e selectat
+  if (calculatorId) {
+    newSub.calculatorId = calculatorId;
+  }
   
   if (editingItem.index !== null) {
     subcategories[editingItem.catId][editingItem.index] = newSub;
@@ -2940,30 +2980,20 @@ function generateSubcategoryContent(catId, sub) {
 }
 
 function generateCalculatorContent(catId, sub) {
-  // Verifică dacă există calculatoare personalizate pentru acest tab
-  const customCalcs = calculators.filter(c => c.tabId === sub.id);
+  // Verifică mai întâi dacă subcategoria are un calculator personalizat asociat
+  if (sub.calculatorId) {
+    const customCalc = calculators.find(c => c.id === sub.calculatorId);
+    if (customCalc) {
+      return generateCustomCalculatorHTML(customCalc);
+    }
+  }
   
+  // Apoi verifică dacă există calculatoare pentru acest tab
+  const customCalcs = calculators.filter(c => c.tabId === sub.id);
   if (customCalcs.length > 0) {
-    // Generează HTML pentru calculatoare personalizate - IDENTIC CU COCAINA
     let html = '';
     customCalcs.forEach(calc => {
-      html += `
-        <div class="sc gn">
-          <div class="st green">${calc.icon} ${calc.name}</div>
-          <div class="ir">
-            <div class="ig">
-              <label>${calc.inputIcon} ${calc.inputLabel}</label>
-              <input type="number" id="calc_${calc.id}_input" placeholder="${calc.inputPlaceholder}" min="0" value="${calc.inputPlaceholder || 100}" oninput="calcCustom('${calc.id}')">
-            </div>
-          </div>
-          <div class="ib">✨ Introdu ${calc.inputLabel.toLowerCase()} pentru a calcula intregul proces</div>
-        </div>
-        <div class="gr g3" id="calc_${calc.id}_cards"></div>
-        <div class="sm">
-          <div class="sm-t">📊 Sumar Final</div>
-          <div class="sg" id="calc_${calc.id}_summary"></div>
-        </div>
-      `;
+      html += generateCustomCalculatorHTML(calc);
     });
     return html;
   }
@@ -3026,6 +3056,26 @@ function generateCalculatorContent(catId, sub) {
     `;
   }
   return `<div class="sc"><div class="st">Calculator ${sub.name}</div></div>`;
+}
+
+function generateCustomCalculatorHTML(calc) {
+  return `
+    <div class="sc gn">
+      <div class="st green">${calc.icon} ${calc.name}</div>
+      <div class="ir">
+        <div class="ig">
+          <label>${calc.inputIcon} ${calc.inputLabel}</label>
+          <input type="number" id="calc_${calc.id}_input" placeholder="${calc.inputPlaceholder}" min="0" value="${calc.inputPlaceholder || 100}" oninput="calcCustom('${calc.id}')">
+        </div>
+      </div>
+      <div class="ib">✨ Introdu ${calc.inputLabel.toLowerCase()} pentru a calcula intregul proces</div>
+    </div>
+    <div class="gr g3" id="calc_${calc.id}_cards"></div>
+    <div class="sm">
+      <div class="sm-t">📊 Sumar Final</div>
+      <div class="sg" id="calc_${calc.id}_summary"></div>
+    </div>
+  `;
 }
 
 function generateTableContent(catId, sub) {
