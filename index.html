@@ -814,6 +814,78 @@ td b { color:var(--s) }
 }
 .admin-filter-btn:hover { border-color: var(--owner); color: var(--tx); }
 .admin-filter-btn.active { background: rgba(255,0,0,.1); border-color: var(--owner); color: var(--owner); }
+
+/* Admin Tabs */
+.admin-tabs {
+  display: flex; gap: 6px; margin-bottom: 15px; flex-wrap: wrap;
+}
+.admin-tab {
+  padding: 8px 14px; background: var(--inp); border: 1px solid var(--bd);
+  border-radius: 8px; color: var(--dm); font-size: 0.75rem; font-weight: 700;
+  cursor: pointer; transition: all .3s; font-family: 'Rajdhani', sans-serif;
+}
+.admin-tab:hover { border-color: var(--owner); color: var(--tx); }
+.admin-tab.active {
+  background: linear-gradient(135deg, rgba(255,0,0,.15), rgba(255,0,0,.05));
+  border-color: var(--owner); color: var(--owner);
+  box-shadow: 0 0 15px var(--owner-glow);
+}
+.admin-section {
+  display: none;
+}
+.admin-section.active {
+  display: block;
+}
+
+/* Calculator List Styles */
+.calculator-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; margin-top: 15px;
+}
+.calculator-item {
+  display: flex; flex-direction: column;
+  padding: 15px; background: rgba(0,0,0,.2);
+  border: 1px solid var(--bd); border-radius: 10px;
+  transition: all .3s;
+}
+.calculator-item:hover { border-color: var(--owner); background: rgba(255,0,0,.05); }
+.calculator-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.calculator-name {
+  font-weight: 700; color: var(--tx); font-size: 1rem;
+  font-family: 'Orbitron', monospace;
+}
+.calculator-icon { font-size: 1.5rem; margin-right: 10px; }
+.calculator-meta {
+  font-size: 0.7rem; color: var(--dm); margin-bottom: 8px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.calculator-inputs {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 6px; margin-bottom: 10px;
+  padding: 10px; background: rgba(0,0,0,.15);
+  border-radius: 8px;
+}
+.calculator-input-badge {
+  padding: 4px 8px; background: rgba(0,212,255,.1);
+  border: 1px solid rgba(0,212,255,.3); border-radius: 6px;
+  font-size: 0.7rem; color: var(--a); font-weight: 600;
+}
+.calculator-outputs {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 6px;
+  padding: 10px; background: rgba(0,255,136,.05);
+  border-radius: 8px;
+}
+.calculator-output-badge {
+  padding: 4px 8px; background: rgba(0,255,136,.1);
+  border: 1px solid rgba(0,255,136,.3); border-radius: 6px;
+  font-size: 0.7rem; color: var(--g); font-weight: 600;
+}
+
 @keyframes slideIn { from{transform:translateX(100px);opacity:0} to{transform:none;opacity:1} }
 @keyframes slideOut { from{transform:none;opacity:1} to{transform:translateX(100px);opacity:0} }
 
@@ -891,6 +963,7 @@ input, textarea, select { -webkit-user-select: text !important; -moz-user-select
     <button class="admin-tab" onclick="switchAdminTab('subcategories', this)">📂 Subcategorii</button>
     <button class="admin-tab" onclick="switchAdminTab('data', this)">📦 Date</button>
     <button class="admin-tab" onclick="switchAdminTab('tools', this)">🔧 Unelte</button>
+    <button class="admin-tab" onclick="switchAdminTab('calculators', this)">📊 Calculatoare</button>
   </div>
 
   <div class="admin-section active" id="admin-members">
@@ -928,6 +1001,11 @@ input, textarea, select { -webkit-user-select: text !important; -moz-user-select
     <input type="file" id="import-file" style="display:none;" accept=".json" onchange="handleImport(event)">
     <button onclick="exportMembers()" style="width:100%;margin-top:8px;padding:10px;background:linear-gradient(135deg,var(--s),#cc9900);border:none;border-radius:8px;color:#000;font-family:'Rajdhani',sans-serif;font-weight:700;cursor:pointer;">👥 Exporta Membri</button>
     <button onclick="clearExpiredMembers()" style="width:100%;margin-top:8px;padding:10px;background:linear-gradient(135deg,var(--r),#cc0033);border:none;border-radius:8px;color:white;font-family:'Rajdhani',sans-serif;font-weight:700;cursor:pointer;">🗑️ Sterge Membri Expirat</button>
+  </div>
+
+  <div class="admin-section" id="admin-calculators">
+    <button class="add-btn" onclick="openCalculatorModal()">➕ Adauga Calculator Nou</button>
+    <div class="calculator-list" id="calculator-list"></div>
   </div>
 
   <button onclick="toggleAdmin()" style="width:100%;margin-top:12px;padding:10px;background:var(--bd);border:none;border-radius:8px;color:var(--tx);font-family:'Rajdhani',sans-serif;font-weight:700;cursor:pointer;">✕ Inchide Panoul</button>
@@ -1224,6 +1302,22 @@ let COMP = APP_DATA.COMP;
 let MATARME = APP_DATA.MATARME;
 let MASA = APP_DATA.MASA;
 let LOC = APP_DATA.LOC;
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  SISTEM CALCULATOARE PERSONALIZATE  ███
+   ═══════════════════════════════════════════════════════════════ */
+
+function loadCalculators() {
+  const saved = localStorage.getItem('craft_calculators');
+  return saved ? JSON.parse(saved) : [];
+}
+
+function saveCalculators() {
+  localStorage.setItem('craft_calculators', JSON.stringify(calculators));
+}
+
+let calculators = loadCalculators();
+let editingCalculator = null;
 
 /* ═══════════════════════════════════════════════════════════════
    ███  SISTEM MEMBRII - CORECTAT  ███
@@ -1695,6 +1789,7 @@ function switchAdminTab(tab, clickedBtn) {
     renderDataTabs();
     renderDataList();
   }
+  if (tab === 'calculators') renderCalculatorsList();
 }
 
 function updateStats() {
@@ -2270,6 +2365,323 @@ function saveSubcategory() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   ███  MANAGER CALCULATOARE PERSONALIZATE  ███
+   ═══════════════════════════════════════════════════════════════ */
+
+function renderCalculatorsList() {
+  const container = $('calculator-list');
+  container.innerHTML = '';
+  
+  if (calculators.length === 0) {
+    container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--dm);font-style:italic;">Nu exista calculatoare personalizate</div>';
+    return;
+  }
+  
+  calculators.forEach((calc, index) => {
+    const item = document.createElement('div');
+    item.className = 'calculator-item';
+    
+    const inputsHtml = calc.inputs.map(inp => 
+      `<div class="calculator-input-badge">${inp.icon} ${inp.label}</div>`
+    ).join('');
+    
+    const outputsHtml = calc.outputs.map(out => 
+      `<div class="calculator-output-badge">${out.icon} ${out.label}</div>`
+    ).join('');
+    
+    item.innerHTML = `
+      <div class="calculator-header">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="calculator-icon">${calc.icon}</span>
+          <div>
+            <div class="calculator-name">${calc.name}</div>
+            <div class="calculator-meta">ID: ${calc.id} | Tab: ${calc.tabId}</div>
+          </div>
+        </div>
+        <div class="data-item-actions">
+          <button class="icon-btn edit" onclick="editCalculator(${index})">✏️</button>
+          <button class="icon-btn delete" onclick="deleteCalculator(${index})">🗑️</button>
+        </div>
+      </div>
+      <div style="margin-bottom:8px;">
+        <div style="font-size:0.75rem;color:var(--dm);margin-bottom:4px;">📥 INPUTS:</div>
+        <div class="calculator-inputs">${inputsHtml}</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--dm);margin-bottom:4px;">📤 OUTPUTS:</div>
+        <div class="calculator-outputs">${outputsHtml}</div>
+      </div>
+    `;
+    
+    container.appendChild(item);
+  });
+}
+
+function openCalculatorModal(editIndex = null) {
+  editingCalculator = editIndex;
+  const calc = editIndex !== null ? calculators[editIndex] : null;
+  
+  $('modal-title').textContent = editIndex !== null ? 'Editeaza Calculator' : 'Adauga Calculator Nou';
+  
+  const inputsHtml = (calc?.inputs || []).map((inp, idx) => `
+    <div class="field-row">
+      <input type="text" placeholder="Label (ex: Faina)" value="${inp.label}" data-input-idx="${idx}" data-field="label">
+      <input type="text" placeholder="Icon" value="${inp.icon}" maxlength="2" style="width:60px;" data-input-idx="${idx}" data-field="icon">
+      <input type="text" placeholder="ID (ex: faina)" value="${inp.id}" data-input-idx="${idx}" data-field="id">
+      <button onclick="removeCalcInput(${idx})">✕</button>
+    </div>
+  `).join('');
+  
+  const outputsHtml = (calc?.outputs || []).map((out, idx) => `
+    <div class="field-row">
+      <input type="text" placeholder="Label (ex: Total Tigari)" value="${out.label}" data-output-idx="${idx}" data-field="label">
+      <input type="text" placeholder="Icon" value="${out.icon}" maxlength="2" style="width:60px;" data-output-idx="${idx}" data-field="icon">
+      <input type="text" placeholder="ID (ex: total_tigari)" value="${out.id}" data-output-idx="${idx}" data-field="id">
+      <button onclick="removeCalcOutput(${idx})">✕</button>
+    </div>
+  `).join('');
+  
+  const materialsHtml = (calc?.materials || []).map((mat, idx) => `
+    <div class="field-row">
+      <input type="text" placeholder="Nume Material (ex: Faina)" value="${mat.name}" data-material-idx="${idx}" data-field="name">
+      <input type="text" placeholder="Icon" value="${mat.icon}" maxlength="2" style="width:60px;" data-material-idx="${idx}" data-field="icon">
+      <input type="text" placeholder="Per Unit (ex: 2 sau 2.5)" value="${mat.per_unit}" data-material-idx="${idx}" data-field="per_unit">
+      <button onclick="removeCalcMaterial(${idx})">✕</button>
+    </div>
+  `).join('');
+  
+  $('modal-content').innerHTML = `
+    <div class="form-group">
+      <label>ID Calculator (unic, fara spatii)</label>
+      <input type="text" id="calc-id" value="${calc?.id || ''}" ${calc ? 'readonly' : ''} placeholder="ex: calculator_tigari">
+    </div>
+    <div class="form-group">
+      <label>Nume Calculator</label>
+      <input type="text" id="calc-name" value="${calc?.name || ''}" placeholder="ex: Calculator Tigari">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Icon (emoji)</label>
+        <input type="text" id="calc-icon" value="${calc?.icon || '🧮'}" maxlength="2">
+      </div>
+      <div class="form-group">
+        <label>Tab ID (unde se afiseaza)</label>
+        <input type="text" id="calc-tab" value="${calc?.tabId || ''}" placeholder="ex: drugs, food">
+      </div>
+    </div>
+    
+    <div class="dynamic-fields">
+      <h4>📥 INPUTS (ce introduce userul) <button class="add-field-btn" onclick="addCalcInput()">+ Adauga Input</button></h4>
+      <div id="calc-inputs-container">${inputsHtml || '<div style="color:var(--dm);font-size:0.8rem;padding:10px;">Apasa butonul pentru a adauga inputs</div>'}</div>
+    </div>
+    
+    <div class="dynamic-fields">
+      <h4>🧪 MATERIALE (ce se consuma per unitate) <button class="add-field-btn" onclick="addCalcMaterial()">+ Adauga Material</button></h4>
+      <div id="calc-materials-container">${materialsHtml || '<div style="color:var(--dm);font-size:0.8rem;padding:10px;">Apasa butonul pentru a adauga materiale</div>'}</div>
+    </div>
+    
+    <div class="dynamic-fields">
+      <h4>📤 OUTPUTS (ce se calculeaza si afiseaza) <button class="add-field-btn" onclick="addCalcOutput()">+ Adauga Output</button></h4>
+      <div id="calc-outputs-container">${outputsHtml || '<div style="color:var(--dm);font-size:0.8rem;padding:10px;">Apasa butonul pentru a adauga outputs</div>'}</div>
+    </div>
+    
+    <div class="form-group">
+      <label>Formula Calcul (JavaScript)</label>
+      <textarea id="calc-formula" placeholder="ex: return { total_tigari: inputs.cantitate * 20, total_faina: inputs.cantitate * 2 };" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;min-height:120px;">${calc?.formula || ''}</textarea>
+      <div style="font-size:0.7rem;color:var(--dm);margin-top:6px;">
+        💡 Inputs: <code>inputs.id_input</code> | Materials: <code>materials.nume_material</code> | 
+        Return: obiect cu outputs { id_output: valoare }
+      </div>
+    </div>
+  `;
+  
+  $('modal-overlay').classList.add('active');
+}
+
+function addCalcInput() {
+  const container = $('calc-inputs-container');
+  if (container.querySelector('div[style*="Apasa butonul"]')) {
+    container.innerHTML = '';
+  }
+  
+  const newIdx = container.querySelectorAll('.field-row').length;
+  const row = document.createElement('div');
+  row.className = 'field-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Label (ex: Cantitate)" data-input-idx="${newIdx}" data-field="label">
+    <input type="text" placeholder="Icon" value="📦" maxlength="2" style="width:60px;" data-input-idx="${newIdx}" data-field="icon">
+    <input type="text" placeholder="ID (ex: cantitate)" data-input-idx="${newIdx}" data-field="id">
+    <button onclick="this.parentElement.remove()">✕</button>
+  `;
+  container.appendChild(row);
+}
+
+function removeCalcInput(idx) {
+  event.target.parentElement.remove();
+}
+
+function addCalcMaterial() {
+  const container = $('calc-materials-container');
+  if (container.querySelector('div[style*="Apasa butonul"]')) {
+    container.innerHTML = '';
+  }
+  
+  const newIdx = container.querySelectorAll('.field-row').length;
+  const row = document.createElement('div');
+  row.className = 'field-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Nume Material (ex: Faina)" data-material-idx="${newIdx}" data-field="name">
+    <input type="text" placeholder="Icon" value="🌾" maxlength="2" style="width:60px;" data-material-idx="${newIdx}" data-field="icon">
+    <input type="text" placeholder="Per Unit (ex: 2.5)" data-material-idx="${newIdx}" data-field="per_unit">
+    <button onclick="this.parentElement.remove()">✕</button>
+  `;
+  container.appendChild(row);
+}
+
+function removeCalcMaterial(idx) {
+  event.target.parentElement.remove();
+}
+
+function addCalcOutput() {
+  const container = $('calc-outputs-container');
+  if (container.querySelector('div[style*="Apasa butonul"]')) {
+    container.innerHTML = '';
+  }
+  
+  const newIdx = container.querySelectorAll('.field-row').length;
+  const row = document.createElement('div');
+  row.className = 'field-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Label (ex: Total Material)" data-output-idx="${newIdx}" data-field="label">
+    <input type="text" placeholder="Icon" value="📊" maxlength="2" style="width:60px;" data-output-idx="${newIdx}" data-field="icon">
+    <input type="text" placeholder="ID (ex: total_material)" data-output-idx="${newIdx}" data-field="id">
+    <button onclick="this.parentElement.remove()">✕</button>
+  `;
+  container.appendChild(row);
+}
+
+function removeCalcOutput(idx) {
+  event.target.parentElement.remove();
+}
+
+function saveCalculator() {
+  const id = $('calc-id').value.trim().toLowerCase();
+  const name = $('calc-name').value.trim();
+  const icon = $('calc-icon').value;
+  const tabId = $('calc-tab').value.trim().toLowerCase();
+  const formula = $('calc-formula').value.trim();
+  
+  if (!id || !name || !tabId) {
+    alert('ID, Nume si Tab ID sunt obligatorii!');
+    return;
+  }
+  
+  if (!/^[a-z0-9_]+$/.test(id)) {
+    alert('ID-ul poate contine doar litere mici, cifre si underscore!');
+    return;
+  }
+  
+  if (!/^[a-z0-9_]+$/.test(tabId)) {
+    alert('Tab ID poate contine doar litere mici, cifre si underscore!');
+    return;
+  }
+  
+  // Colectez inputs
+  const inputs = [];
+  document.querySelectorAll('[data-input-idx]').forEach(elem => {
+    const idx = elem.getAttribute('data-input-idx');
+    const field = elem.getAttribute('data-field');
+    
+    if (!inputs[idx]) {
+      inputs[idx] = {};
+    }
+    inputs[idx][field] = elem.value.trim();
+  });
+  
+  const validInputs = inputs.filter(inp => inp && inp.id && inp.label);
+  
+  // Colectez materials
+  const materials = [];
+  document.querySelectorAll('[data-material-idx]').forEach(elem => {
+    const idx = elem.getAttribute('data-material-idx');
+    const field = elem.getAttribute('data-field');
+    
+    if (!materials[idx]) {
+      materials[idx] = {};
+    }
+    materials[idx][field] = elem.value.trim();
+  });
+  
+  const validMaterials = materials.filter(mat => mat && mat.name && mat.per_unit);
+  
+  // Colectez outputs
+  const outputs = [];
+  document.querySelectorAll('[data-output-idx]').forEach(elem => {
+    const idx = elem.getAttribute('data-output-idx');
+    const field = elem.getAttribute('data-field');
+    
+    if (!outputs[idx]) {
+      outputs[idx] = {};
+    }
+    outputs[idx][field] = elem.value.trim();
+  });
+  
+  const validOutputs = outputs.filter(out => out && out.id && out.label);
+  
+  if (validInputs.length === 0) {
+    alert('Trebuie sa adaugi cel putin un input!');
+    return;
+  }
+  
+  if (validOutputs.length === 0) {
+    alert('Trebuie sa adaugi cel putin un output!');
+    return;
+  }
+  
+  const newCalc = {
+    id,
+    name,
+    icon,
+    tabId,
+    inputs: validInputs,
+    materials: validMaterials,
+    outputs: validOutputs,
+    formula
+  };
+  
+  if (editingCalculator !== null) {
+    calculators[editingCalculator] = newCalc;
+  } else {
+    if (calculators.find(c => c.id === id)) {
+      alert('Exista deja un calculator cu acest ID!');
+      return;
+    }
+    calculators.push(newCalc);
+  }
+  
+  saveCalculators();
+  closeModal();
+  renderCalculatorsList();
+  renderDynamicPanels(); // Re-render panels pentru a afisa noul calculator
+  showNotification(`Calculator "${name}" a fost ${editingCalculator !== null ? 'actualizat' : 'adaugat'}!`);
+}
+
+function editCalculator(index) {
+  openCalculatorModal(index);
+}
+
+function deleteCalculator(index) {
+  if (!confirm('Sigur vrei sa stergi acest calculator?')) return;
+  
+  const name = calculators[index].name;
+  calculators.splice(index, 1);
+  saveCalculators();
+  renderCalculatorsList();
+  renderDynamicPanels();
+  showNotification(`Calculator "${name}" a fost sters!`);
+}
+
+/* ═══════════════════════════════════════════════════════════════
    ███  RANDARE CATEGORII IN MAIN APP  ███
    ═══════════════════════════════════════════════════════════════ */
 
@@ -2351,6 +2763,11 @@ function renderDynamicPanels() {
     initComp();
     initM();
     initL();
+    
+    // Inițializează calculatoarele personalizate
+    calculators.forEach(calc => {
+      calcCustom(calc.id);
+    });
   }, 100);
 }
 
@@ -2369,7 +2786,55 @@ function generateSubcategoryContent(catId, sub) {
 }
 
 function generateCalculatorContent(catId, sub) {
-  // Conținut pentru calculatoare (cocaina, gloante, arme)
+  // Verifică dacă există calculatoare personalizate pentru acest tab
+  const customCalcs = calculators.filter(c => c.tabId === sub.id);
+  
+  if (customCalcs.length > 0) {
+    // Generează HTML pentru calculatoare personalizate
+    let html = '';
+    customCalcs.forEach(calc => {
+      html += `
+        <div class="sc gn">
+          <div class="st green">${calc.icon} ${calc.name}</div>
+          <div class="ir">
+            ${calc.inputs.map(inp => `
+              <div class="ig">
+                <label>${inp.icon} ${inp.label}</label>
+                <input type="number" id="calc_${calc.id}_${inp.id}" placeholder="0" min="0" value="0" oninput="calcCustom('${calc.id}')">
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        
+        ${calc.materials.length > 0 ? `
+          <div class="gr g3">
+            ${calc.materials.map(mat => `
+              <div class="mc cu">
+                <div class="ic">${mat.icon}</div>
+                <div class="nm">${mat.name}</div>
+                <div class="vl" id="calc_${calc.id}_mat_${mat.name.toLowerCase().replace(/\s+/g, '_')}">0</div>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+        
+        <div class="sm">
+          <div class="sm-t">📊 Rezultate</div>
+          <div class="sg">
+            ${calc.outputs.map(out => `
+              <div class="si">
+                <div class="lb">${out.icon} ${out.label}</div>
+                <div class="sv gl" id="calc_${calc.id}_${out.id}">0</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    });
+    return html;
+  }
+  
+  // Conținut pentru calculatoare hardcodate (cocaina, gloante, arme)
   if (sub.id === 'cocaina') {
     return `
       <div class="sc gn">
@@ -2806,6 +3271,12 @@ function saveData() {
   
   if (modalMode === 'subcategory') {
     saveSubcategory();
+    return;
+  }
+  
+  // Check daca este modal de calculator
+  if ($('calc-id')) {
+    saveCalculator();
     return;
   }
   
@@ -3251,6 +3722,69 @@ function initL() {
   });
   h += '</div>';
   $('lT').innerHTML = h;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ███  CALCULATOR PERSONALIZAT - RUNTIME  ███
+   ═══════════════════════════════════════════════════════════════ */
+
+function calcCustom(calcId) {
+  const calc = calculators.find(c => c.id === calcId);
+  if (!calc) {
+    console.error('Calculator nu exista:', calcId);
+    return;
+  }
+  
+  // Colectez valorile din inputs
+  const inputs = {};
+  calc.inputs.forEach(inp => {
+    const elem = $(`calc_${calcId}_${inp.id}`);
+    inputs[inp.id] = elem ? parseFloat(elem.value) || 0 : 0;
+  });
+  
+  // Calculez materialele necesare
+  const materials = {};
+  calc.materials.forEach(mat => {
+    const matId = mat.name.toLowerCase().replace(/\s+/g, '_');
+    materials[mat.name] = inputs[calc.inputs[0]?.id || 'cantitate'] * parseFloat(mat.per_unit);
+    
+    const elem = $(`calc_${calcId}_mat_${matId}`);
+    if (elem) {
+      elem.textContent = materials[mat.name].toFixed(2);
+    }
+  });
+  
+  // Execut formula personalizată
+  try {
+    let results = {};
+    
+    if (calc.formula && calc.formula.trim()) {
+      // Execut formula în context izolat
+      const formulaFunc = new Function('inputs', 'materials', calc.formula);
+      results = formulaFunc(inputs, materials) || {};
+    }
+    
+    // Afișez rezultatele
+    calc.outputs.forEach(out => {
+      const elem = $(`calc_${calcId}_${out.id}`);
+      if (elem) {
+        const value = results[out.id] !== undefined ? results[out.id] : 0;
+        
+        // Format valoare
+        if (typeof value === 'number') {
+          elem.textContent = Number.isInteger(value) ? value.toString() : value.toFixed(2);
+        } else {
+          elem.textContent = value.toString();
+        }
+      }
+    });
+  } catch (err) {
+    console.error('Eroare la executia formulei pentru', calcId, ':', err);
+    calc.outputs.forEach(out => {
+      const elem = $(`calc_${calcId}_${out.id}`);
+      if (elem) elem.textContent = 'ERROR';
+    });
+  }
 }
 
 // ✅ CORECTAT: Verificare defensivă pentru canvas
